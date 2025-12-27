@@ -4,5 +4,8 @@
   "version": "0.0.0",
   "exports": {
     ".": "./index.cjs"
+  },
+  "dependencies": {
+    "prettier-plugin-tailwindcss": "^0.7.2"
   }
 }
