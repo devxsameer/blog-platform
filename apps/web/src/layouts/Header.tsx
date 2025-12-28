@@ -1,5 +1,5 @@
-// web/src/layout/Header.tsx
 import { useState } from 'react';
+import { Link, NavLink as RouterNavLink } from 'react-router';
 
 type User = {
   username: string;
@@ -7,11 +7,7 @@ type User = {
 };
 
 function useAuth() {
-  // 🔁 replace with real auth later
-  const user: User | null = {
-    username: 'devxsameer',
-  };
-
+  const user: User | null = { username: 'devxsameer' };
   return {
     user,
     logout: () => console.log('logout'),
@@ -26,34 +22,34 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between border-b border-neutral-200 px-4 py-3">
-        {/* Logo */}
-        <a href="/" className="flex flex-col leading-none">
+        {/* Logo - Changed to Link */}
+        <Link to="/" className="flex flex-col leading-none">
           <span className="text-xl font-bold tracking-tight">
             Blog<span className="text-neutral-400">.</span>
           </span>
           <span className="text-sm text-neutral-500">
             writing with <span className="font-medium">devxsameer</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-6 md:flex">
-          <NavLink href="/">Home</NavLink>
-          <NavLink href="/posts">Posts</NavLink>
-          <NavLink href="/about">About</NavLink>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/posts">Posts</NavLink>
+          <NavLink to="/about">About</NavLink>
         </nav>
 
         {/* Auth Actions (Desktop) */}
         <div className="hidden items-center gap-4 md:flex">
           {!user ? (
             <>
-              <NavLink href="/login">Login</NavLink>
-              <a
-                href="/signup"
+              <NavLink to="/login">Login</NavLink>
+              <Link
+                to="/signup"
                 className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
               >
                 Sign up
-              </a>
+              </Link>
             </>
           ) : (
             <div className="relative">
@@ -71,8 +67,8 @@ export default function Header() {
 
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-40 rounded-md border border-neutral-200 bg-white shadow-sm">
-                  <DropdownLink href="/profile">Profile</DropdownLink>
-                  <DropdownLink href="/dashboard">Dashboard</DropdownLink>
+                  <DropdownLink to="/profile">Profile</DropdownLink>
+                  <DropdownLink to="/dashboard">Dashboard</DropdownLink>
                   <button
                     onClick={logout}
                     className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
@@ -85,7 +81,7 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button remains same */}
         <button
           onClick={() => setOpen(!open)}
           className="rounded-md p-2 text-neutral-700 hover:bg-neutral-100 md:hidden"
@@ -121,33 +117,31 @@ export default function Header() {
       {open && (
         <div className="border-t border-neutral-200 bg-white md:hidden">
           <nav className="flex flex-col gap-2 px-4 py-4">
-            <MobileNavLink href="/" onClick={() => setOpen(false)}>
+            <MobileNavLink to="/" onClick={() => setOpen(false)}>
               Home
             </MobileNavLink>
-            <MobileNavLink href="/posts" onClick={() => setOpen(false)}>
+            <MobileNavLink to="/posts" onClick={() => setOpen(false)}>
               Posts
             </MobileNavLink>
-            <MobileNavLink href="/about" onClick={() => setOpen(false)}>
+            <MobileNavLink to="/about" onClick={() => setOpen(false)}>
               About
             </MobileNavLink>
-
             <div className="my-2 border-t border-neutral-200" />
-
             {!user ? (
               <>
-                <MobileNavLink href="/login" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/login" onClick={() => setOpen(false)}>
                   Login
                 </MobileNavLink>
-                <MobileNavLink href="/signup" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/signup" onClick={() => setOpen(false)}>
                   Sign up
                 </MobileNavLink>
               </>
             ) : (
               <>
-                <MobileNavLink href="/profile" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/profile" onClick={() => setOpen(false)}>
                   Profile
                 </MobileNavLink>
-                <MobileNavLink href="/dashboard" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/dashboard" onClick={() => setOpen(false)}>
                   Dashboard
                 </MobileNavLink>
                 <button
@@ -165,58 +159,58 @@ export default function Header() {
   );
 }
 
-/* ---------- helpers ---------- */
+/* ---------- Updated Helpers ---------- */
 
-function NavLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
+function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
-    <a
-      href={href}
-      className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
+    <RouterNavLink
+      to={to}
+      className={({ isActive }) =>
+        `text-sm font-medium transition-colors hover:text-neutral-900 ${
+          isActive
+            ? 'text-neutral-900 underline underline-offset-4'
+            : 'text-neutral-500'
+        }`
+      }
     >
       {children}
-    </a>
+    </RouterNavLink>
   );
 }
 
 function MobileNavLink({
-  href,
+  to,
   children,
   onClick,
 }: {
-  href: string;
+  to: string;
   children: React.ReactNode;
   onClick: () => void;
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={to}
       onClick={onClick}
       className="rounded-md px-2 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
 function DropdownLink({
-  href,
+  to,
   children,
 }: {
-  href: string;
+  to: string;
   children: React.ReactNode;
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={to}
       className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
     >
       {children}
-    </a>
+    </Link>
   );
 }

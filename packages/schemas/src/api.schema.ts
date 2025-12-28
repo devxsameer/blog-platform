@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-export const ApiSuccess = <T extends z.ZodTypeAny>(dataSchema: T) =>
+export const ApiEnvelope = <T extends z.ZodTypeAny>(data: T) =>
   z.object({
     success: z.literal(true),
     message: z.string(),
-    data: dataSchema.nullable(),
-    meta: z.any().nullable(),
+    data,
+    meta: z.any().optional(),
   });

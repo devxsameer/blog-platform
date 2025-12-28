@@ -65,6 +65,12 @@ importers:
       '@blog/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@blog/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      '@blog/token-store':
+        specifier: workspace:*
+        version: link:../../packages/token-store
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2))
@@ -123,6 +129,9 @@ importers:
       '@blog/schemas':
         specifier: workspace:*
         version: link:../schemas
+      '@blog/token-store':
+        specifier: workspace:*
+        version: link:../token-store
       zod:
         specifier: ^4.2.1
         version: 4.2.1
@@ -169,6 +178,18 @@ importers:
       zod:
         specifier: ^4.2.1
         version: 4.2.1
+    devDependencies:
+      '@blog/prettier-config':
+        specifier: workspace:*
+        version: link:../prettier-config
+      prettier:
+        specifier: ^3.7.4
+        version: 3.7.4
+      prettier-plugin-tailwindcss:
+        specifier: ^0.7.2
+        version: 0.7.2(prettier@3.7.4)
+
+  packages/token-store:
     devDependencies:
       '@blog/prettier-config':
         specifier: workspace:*

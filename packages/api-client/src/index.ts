@@ -1,3 +1,3 @@
-export * from './config';
-export * from './api';
-export * from './auth.api';
+export * from './client';
+export * from './auth';
+export * from './session';
