@@ -1,6 +1,8 @@
+// api-client/src/session.ts
 import { RefreshResponseSchema } from '@blog/schemas';
 import { tokenStore } from '@blog/token-store';
 import type { ApiClient } from './client';
+import { emitLogout } from './auth.events';
 
 export async function refreshRaw(client: ApiClient): Promise<string> {
   const res = await fetch(`${client.baseUrl}/api/auth/refresh`, {
@@ -16,13 +18,16 @@ export async function refreshRaw(client: ApiClient): Promise<string> {
   return parsed.data.accessToken;
 }
 
-export async function restoreSession(client: ApiClient): Promise<boolean> {
+export async function restoreSession(
+  client: ApiClient,
+): Promise<string | null> {
   try {
     const token = await refreshRaw(client);
     tokenStore.set(token);
-    return true;
+    return token;
   } catch {
     tokenStore.clear();
-    return false;
+    emitLogout();
+    return null;
   }
 }

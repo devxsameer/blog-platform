@@ -1,11 +1,12 @@
+// api-client/src/http.ts
 import { z } from 'zod';
 import { ApiErrorSchema } from '@blog/schemas';
 import { tokenStore } from '@blog/token-store';
-import { refreshRaw } from './session';
+import { restoreSession } from './session';
 import type { ApiClient } from './client';
 
-let isRefreshing = false;
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<string | null> | null = null;
+let refreshGeneration = 0;
 
 export async function http<T>(
   client: ApiClient,
@@ -34,9 +35,7 @@ export async function http<T>(
       throw { code: 'UNKNOWN_ERROR', message: 'Unexpected error' };
     }
 
-    if (!schema) return json as T;
-
-    return schema.parse(json);
+    return schema ? schema.parse(json) : (json as T);
   };
 
   try {
@@ -44,20 +43,25 @@ export async function http<T>(
   } catch (err: any) {
     if (err.code !== 'UNAUTHORIZED') throw err;
 
-    if (!isRefreshing) {
-      isRefreshing = true;
-      refreshPromise = refreshRaw(client)
-        .then((token) => {
-          tokenStore.set(token);
-          return token;
-        })
-        .finally(() => {
-          isRefreshing = false;
-          refreshPromise = null;
-        });
+    const method = options.method ?? 'GET';
+    const isIdempotent = ['GET', 'HEAD', 'OPTIONS'].includes(method);
+
+    if (!isIdempotent) throw err;
+
+    if (!refreshPromise) {
+      const myGen = ++refreshGeneration;
+
+      refreshPromise = restoreSession(client).then((token) => {
+        if (myGen !== refreshGeneration) return null;
+        return token;
+      });
     }
 
-    await refreshPromise;
+    const token = await refreshPromise;
+    refreshPromise = null;
+
+    if (!token) throw err;
+
     return doRequest();
   }
 }

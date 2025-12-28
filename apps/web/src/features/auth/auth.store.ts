@@ -1,3 +1,4 @@
+// web/src/features/auth/auth.store.ts
 import type { User } from '@blog/schemas';
 
 let user: User | null = null;

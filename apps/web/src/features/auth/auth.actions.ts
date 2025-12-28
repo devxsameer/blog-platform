@@ -1,9 +1,9 @@
-// web/src/features/auth/actions.ts
+// web/src/features/auth/auth.actions.ts
 import { redirect } from 'react-router';
-import { authStore } from './auth.store';
 import type { ActionFunctionArgs } from 'react-router';
 import { tokenStore } from '@blog/token-store';
 import { authApi } from '@/lib/api';
+import { authStore } from './auth.store';
 
 export async function loginAction({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
@@ -25,4 +25,15 @@ export async function signupAction({ request }: ActionFunctionArgs) {
   authStore.setUser(res.user);
 
   throw redirect('/');
+}
+
+export async function logoutAction() {
+  authStore.clear();
+  tokenStore.clear();
+
+  try {
+    await authApi.logout();
+  } finally {
+    throw redirect('/');
+  }
 }

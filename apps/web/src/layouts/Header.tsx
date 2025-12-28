@@ -1,34 +1,23 @@
+import type { RootLoaderData } from '@/app/root.loader';
 import { useState } from 'react';
-import { Link, NavLink as RouterNavLink } from 'react-router';
-
-type User = {
-  username: string;
-  avatarUrl?: string;
-};
-
-function useAuth() {
-  const user: User | null = { username: 'devxsameer' };
-  return {
-    user,
-    logout: () => console.log('logout'),
-  };
-}
+import { Form, Link, NavLink as RouterNavLink } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user } = useRouteLoaderData('root') as RootLoaderData;
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between border-b border-neutral-200 px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between border-b border-neutral-200 px-4 py-2">
         {/* Logo - Changed to Link */}
         <Link to="/" className="flex flex-col leading-none">
-          <span className="text-xl font-bold tracking-tight">
+          <span className="text-xl/tight font-bold tracking-tight">
             Blog<span className="text-neutral-400">.</span>
           </span>
-          <span className="text-sm text-neutral-500">
-            writing with <span className="font-medium">devxsameer</span>
+          <span className="text-sm/tight text-neutral-500">
+            writing with <span className="font-medium">devXsameer</span>
           </span>
         </Link>
 
@@ -43,9 +32,9 @@ export default function Header() {
         <div className="hidden items-center gap-4 md:flex">
           {!user ? (
             <>
-              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/auth/login">Login</NavLink>
               <Link
-                to="/signup"
+                to="/auth/signup"
                 className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
               >
                 Sign up
@@ -69,12 +58,18 @@ export default function Header() {
                 <div className="absolute right-0 mt-2 w-40 rounded-md border border-neutral-200 bg-white shadow-sm">
                   <DropdownLink to="/profile">Profile</DropdownLink>
                   <DropdownLink to="/dashboard">Dashboard</DropdownLink>
-                  <button
-                    onClick={logout}
-                    className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+                  <Form
+                    method="post"
+                    action="/auth/logout"
+                    onSubmit={() => setProfileOpen(false)}
                   >
-                    Logout
-                  </button>
+                    <button
+                      type="submit"
+                      className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+                    >
+                      Logout
+                    </button>
+                  </Form>
                 </div>
               )}
             </div>
@@ -129,10 +124,10 @@ export default function Header() {
             <div className="my-2 border-t border-neutral-200" />
             {!user ? (
               <>
-                <MobileNavLink to="/login" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/auth/login" onClick={() => setOpen(false)}>
                   Login
                 </MobileNavLink>
-                <MobileNavLink to="/signup" onClick={() => setOpen(false)}>
+                <MobileNavLink to="/auth/signup" onClick={() => setOpen(false)}>
                   Sign up
                 </MobileNavLink>
               </>
@@ -144,12 +139,18 @@ export default function Header() {
                 <MobileNavLink to="/dashboard" onClick={() => setOpen(false)}>
                   Dashboard
                 </MobileNavLink>
-                <button
-                  onClick={logout}
-                  className="rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+                <Form
+                  method="post"
+                  action="/auth/logout"
+                  onSubmit={() => setProfileOpen(false)}
                 >
-                  Logout
-                </button>
+                  <button
+                    type="submit"
+                    className="rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+                  >
+                    Logout
+                  </button>
+                </Form>
               </>
             )}
           </nav>

@@ -1,3 +1,4 @@
+// api-client/src/auth.api.ts
 import { http } from './http';
 import type { ApiClient } from './client';
 import {
@@ -32,6 +33,9 @@ export function createAuthApi(client: ApiClient) {
       );
       if (!res.success) throw res.error;
       return res.data;
+    },
+    async logout() {
+      await http(client, '/api/auth/logout', { method: 'POST' });
     },
 
     async me() {
