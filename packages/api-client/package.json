@@ -15,8 +15,6 @@
     "prettier-plugin-tailwindcss": "^0.7.2"
   },
   "dependencies": {
-    "@blog/schemas": "workspace:*",
-    "@blog/token-store": "workspace:*",
-    "zod": "^4.2.1"
+    "@blog/token-store": "workspace:*"
   }
 }

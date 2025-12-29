@@ -9,7 +9,6 @@ import {
   signupAction,
 } from '@/features/auth/auth.actions';
 import { rootLoader } from './root.loader';
-import { requireAuth } from '@/features/auth/auth.loaders';
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +17,7 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     loader: rootLoader,
     children: [
-      { index: true, loader: requireAuth, Component: HomePage },
+      { index: true, Component: HomePage },
       {
         path: 'auth',
         Component: AuthPage,

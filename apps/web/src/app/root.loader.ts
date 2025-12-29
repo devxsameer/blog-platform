@@ -1,12 +1,15 @@
 // web/src/app/root.loader.ts
 import { tokenStore } from '@blog/token-store';
 import { authStore } from '@/features/auth/auth.store';
-import { apiClient, authApi } from '@/lib/api';
-import type { User } from '@blog/schemas';
-import { restoreSession } from '@blog/api-client';
+import { authApi } from '@/lib/api';
 
 export type RootLoaderData = {
-  user: User | null;
+  user: {
+    id: string;
+    username: string;
+    role: 'author' | 'admin' | 'user';
+    email: string;
+  } | null;
 };
 
 export async function rootLoader(): Promise<RootLoaderData> {
@@ -14,13 +17,6 @@ export async function rootLoader(): Promise<RootLoaderData> {
     return { user: authStore.getUser() };
   }
   try {
-    if (!tokenStore.get()) {
-      const refreshed = await restoreSession(apiClient);
-      if (!refreshed) {
-        return { user: null };
-      }
-    }
-
     const { user } = await authApi.me();
     authStore.setUser(user);
 

@@ -6,9 +6,9 @@ import { authApi } from '@/lib/api';
 import { authStore } from './auth.store';
 
 export async function loginAction({ request }: ActionFunctionArgs) {
-  const data = Object.fromEntries(await request.formData());
+  const input = Object.fromEntries(await request.formData());
 
-  const res = await authApi.login(data);
+  const res = await authApi.login(input);
 
   tokenStore.set(res.accessToken);
   authStore.setUser(res.user);

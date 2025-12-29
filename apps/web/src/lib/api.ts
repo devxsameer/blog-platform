@@ -1,4 +1,3 @@
-import { createApiClient, createAuthApi } from '@blog/api-client';
+import { authApi, postsApi } from '@blog/api-client';
 
-export const apiClient = createApiClient('');
-export const authApi = createAuthApi(apiClient);
+export { authApi, postsApi };
