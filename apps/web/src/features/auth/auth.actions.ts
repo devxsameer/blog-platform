@@ -4,16 +4,22 @@ import type { ActionFunctionArgs } from 'react-router';
 import { tokenStore } from '@blog/token-store';
 import { authApi } from '@/lib/api';
 import { authStore } from './auth.store';
+import { ValidationError } from '@blog/api-client';
 
 export async function loginAction({ request }: ActionFunctionArgs) {
   const input = Object.fromEntries(await request.formData());
 
-  const res = await authApi.login(input);
-
-  tokenStore.set(res.accessToken);
-  authStore.setUser(res.user);
-
-  throw redirect('/');
+  try {
+    const res = await authApi.login(input);
+    tokenStore.set(res.accessToken);
+    authStore.setUser(res.user);
+    throw redirect('/');
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return err;
+    }
+    throw err;
+  }
 }
 
 export async function signupAction({ request }: ActionFunctionArgs) {

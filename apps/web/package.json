@@ -13,7 +13,6 @@
   "prettier": "@blog/prettier-config",
   "dependencies": {
     "@blog/api-client": "workspace:*",
-    "@blog/schemas": "workspace:*",
     "@blog/token-store": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.0",
