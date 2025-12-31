@@ -31,11 +31,11 @@ export default function CommentForm({
         name="content"
         ref={textareaRef}
         required
-        className="w-full rounded border p-2"
+        className="textarea w-full"
         placeholder={parentId ? 'Write a reply…' : 'Write a comment…'}
       />
 
-      <button disabled={isSubmitting} className="btn mt-2">
+      <button disabled={isSubmitting} className="btn btn-sm mt-3">
         {isSubmitting ? 'Posting…' : 'Post'}
       </button>
     </fetcher.Form>

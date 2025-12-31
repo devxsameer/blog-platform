@@ -1,4 +1,5 @@
 import type { Post } from '@blog/types';
+import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { useFetcher } from 'react-router';
 
@@ -38,15 +39,14 @@ export default function PostMeta({ post }: { post: Post }) {
           type="button"
           onClick={toggleLike}
           disabled={isPending}
-          className={`flex cursor-pointer items-center gap-2 text-base ${
-            likedByMe ? 'text-red-600' : 'text-gray-500'
+          className={`btn btn-sm btn-circle text-base ${
+            likedByMe ? 'btn-error' : 'text-gray-500'
           }`}
         >
-          <span className="text-2xl">♥</span>
-          {likeCount}
+          <HeartIcon className="size-4" />
         </button>
         <span className={`flex items-center gap-2 text-base text-gray-500`}>
-          Views:
+          Views: {likeCount}
           {post.viewCount}
         </span>
       </div>

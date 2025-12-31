@@ -28,7 +28,7 @@ export default function CommentsSection() {
 
   return (
     <section className="mt-12">
-      <h2 className="text-lg font-semibold">Comments</h2>
+      <h2 className="text-xl font-bold">Comments</h2>
       {user ? (
         <CommentForm />
       ) : (

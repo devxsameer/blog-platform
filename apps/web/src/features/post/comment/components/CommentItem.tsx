@@ -12,50 +12,63 @@ export default function CommentItem({ comment }: { comment: CommentNode }) {
   const canDelete = user && user.id === comment.author.id;
 
   return (
-    <div className="space-y-2 border-l pl-4">
-      <div className="text-sm">
-        <span className="font-semibold">{comment.author.username}</span>
-        <p className="my-1 text-neutral-600">{comment.content}</p>
-        <div className="flex gap-3 text-xs text-neutral-500">
-          <button
-            type="button"
-            disabled={!user}
-            onClick={() => setIsReplying((p) => !p)}
-          >
-            Reply
-          </button>
-
-          {canDelete && (
-            <fetcher.Form
-              method="post"
-              action={`comments/${comment.id}/delete`}
-            >
-              <button
-                type="submit"
-                className="cursor-pointer text-red-600"
-                disabled={fetcher.state === 'submitting'}
-              >
-                {fetcher.state === 'submitting' ? 'Deleting…' : 'Delete'}
-              </button>
-            </fetcher.Form>
-          )}
+    <div className="flex items-stretch">
+      <div className="flex min-h-full flex-col items-center gap-2">
+        <div className="avatar avatar-placeholder">
+          <div className="bg-neutral text-neutral-content w-8 rounded-full">
+            <span className="text-sm font-medium">
+              {comment.author.username[0].toUpperCase()}
+            </span>
+          </div>
         </div>
+        <span className="bg-neutral-content w-0.5 grow"></span>
       </div>
+      <div className="grow space-y-2 pl-3">
+        <div className="text-sm">
+          <span className="font-semibold">{comment.author.username}</span>
+          <p className="my-1 text-neutral-600">{comment.content}</p>
+          <div className="flex gap-1 text-xs text-neutral-500">
+            <button
+              type="button"
+              className="btn btn-link btn-neutral btn-sm"
+              disabled={!user}
+              onClick={() => setIsReplying((p) => !p)}
+            >
+              Reply
+            </button>
 
-      {user && isReplying && (
-        <CommentForm
-          parentId={comment.id}
-          onSuccess={() => setIsReplying(false)}
-        />
-      )}
-
-      {comment.replies.length > 0 && (
-        <div className="mt-4 space-y-4">
-          {comment.replies.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} />
-          ))}
+            {canDelete && (
+              <fetcher.Form
+                method="post"
+                action={`comments/${comment.id}/delete`}
+              >
+                <button
+                  type="submit"
+                  className="btn btn-sm btn-link cursor-pointer text-red-600"
+                  disabled={fetcher.state === 'submitting'}
+                >
+                  {fetcher.state === 'submitting' ? 'Deleting…' : 'Delete'}
+                </button>
+              </fetcher.Form>
+            )}
+          </div>
         </div>
-      )}
+
+        {user && isReplying && (
+          <CommentForm
+            parentId={comment.id}
+            onSuccess={() => setIsReplying(false)}
+          />
+        )}
+
+        {comment.replies.length > 0 && (
+          <div className="mt-4 space-y-4">
+            {comment.replies.map((reply) => (
+              <CommentItem key={reply.id} comment={reply} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+@plugin 'daisyui' {
+  themes:
+    light --default,
+    black --prefersdark;
+}
 
 /* Outfit Variable Font */
 @font-face {
@@ -17,16 +22,4 @@
   --font-outfit:
     'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-:root {
-  --accent: 0, 0, 0;
-}
-
-@layer components {
-  .btn {
-    @apply cursor-pointer rounded bg-neutral-950 px-3 py-1 text-sm text-white shadow;
-  }
-  .btn-lg {
-    @apply cursor-pointer rounded bg-neutral-950 px-4 py-2 text-sm text-white shadow;
-  }
 }

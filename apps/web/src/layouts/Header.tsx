@@ -1,12 +1,13 @@
 import type { RootLoaderData } from '@/app/root.loader';
 import { useState } from 'react';
-import { Form, Link, NavLink as RouterNavLink } from 'react-router';
+import { Form, Link, NavLink as RouterNavLink, useFetcher } from 'react-router';
 import { useRouteLoaderData } from 'react-router';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const { user } = useRouteLoaderData('root') as RootLoaderData;
+  const fetcher = useFetcher();
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur">
@@ -42,36 +43,49 @@ export default function Header() {
             </>
           ) : (
             <div className="relative">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 rounded-md px-2 py-1 hover:bg-neutral-100"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900 text-sm font-medium text-white">
-                  {user.username[0].toUpperCase()}
-                </div>
-                <span className="text-sm font-medium text-neutral-700">
-                  {user.username}
-                </span>
-              </button>
-
-              {profileOpen && (
-                <div className="absolute right-0 mt-2 w-40 rounded-md border border-neutral-200 bg-white shadow-sm">
-                  <DropdownLink to="/profile">Profile</DropdownLink>
-                  <DropdownLink to="/dashboard">Dashboard</DropdownLink>
-                  <Form
-                    method="post"
-                    action="/auth/logout"
-                    onSubmit={() => setProfileOpen(false)}
-                  >
+              <div className="dropdown dropdown-end">
+                <button
+                  tabIndex={0}
+                  role="button"
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="m-1 flex items-center gap-2 rounded-md px-2 py-1 hover:bg-neutral-100"
+                >
+                  <div className="avatar avatar-placeholder">
+                    <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                      <span className="text-sm font-medium">
+                        {user.username[0].toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-700">
+                    {user.username}
+                  </span>
+                </button>
+                <ul
+                  tabIndex={-1}
+                  className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                >
+                  <li>
+                    <DropdownLink to="/profile">Profile</DropdownLink>
+                  </li>
+                  <li>
                     <button
-                      type="submit"
+                      type="button"
+                      onClick={() =>
+                        fetcher.submit(null, {
+                          method: 'POST',
+                          action: '/auth/logout',
+                        })
+                      }
                       className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
                     >
-                      Logout
+                      {fetcher.state === 'submitting'
+                        ? 'Logging out...'
+                        : 'Logout'}
                     </button>
-                  </Form>
-                </div>
-              )}
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
