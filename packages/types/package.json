@@ -1,5 +1,5 @@
 {
-  "name": "@blog/api-client",
+  "name": "@blog/types",
   "private": true,
   "type": "module",
   "exports": {
@@ -13,9 +13,5 @@
     "@blog/prettier-config": "workspace:*",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2"
-  },
-  "dependencies": {
-    "@blog/token-store": "workspace:*",
-    "@blog/types": "workspace:*"
   }
 }

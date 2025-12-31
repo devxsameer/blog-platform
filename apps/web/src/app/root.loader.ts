@@ -2,16 +2,9 @@
 import { tokenStore } from '@blog/token-store';
 import { authStore } from '@/features/auth/auth.store';
 import { authApi } from '@/lib/api';
+import type { User } from '@blog/types';
 
-export type RootLoaderData = {
-  user: {
-    id: string;
-    username: string;
-    role: 'author' | 'admin' | 'user';
-    email: string;
-    createdAt?: string;
-  } | null;
-};
+export type RootLoaderData = { user: User | null };
 
 export async function rootLoader(): Promise<RootLoaderData> {
   if (authStore.isAuthed()) {

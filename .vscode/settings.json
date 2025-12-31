@@ -5,6 +5,7 @@
     "auth",
     "posts",
     "validation",
-    "comments"
+    "comments",
+    "types"
   ]
 }

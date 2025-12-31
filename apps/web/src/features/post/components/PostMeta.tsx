@@ -1,4 +1,6 @@
-export default function PostMeta({ post }: any) {
+import type { Post } from '@blog/types';
+
+export default function PostMeta({ post }: { post: Post }) {
   return (
     <div className="text-sm text-gray-500">
       <span>{post.author.username}</span>

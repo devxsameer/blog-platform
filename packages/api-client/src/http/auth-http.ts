@@ -11,6 +11,11 @@ async function refreshSession() {
     method: 'POST',
   });
 
+  if (status === 401) {
+    tokenStore.clear();
+    throw new AuthError();
+  }
+
   const data = unwrap<{ accessToken: string }>(status, body);
   tokenStore.set(data.accessToken);
 }
@@ -20,20 +25,16 @@ export async function authHttp(
   init: RequestInit = {},
   retry = true,
 ): Promise<{ status: number; body: any }> {
-  try {
-    return await http(input, init);
-  } catch (err) {
-    if (!(err instanceof AuthError) || !retry) {
-      throw err;
-    }
-
+  const { status, body } = await http(input, init);
+  if (status === 401) {
+    if (!retry) return { status, body };
     if (!refreshPromise) {
       refreshPromise = refreshSession().finally(() => {
         refreshPromise = null;
       });
     }
-
     await refreshPromise;
     return authHttp(input, init, false);
   }
+  return { status, body };
 }

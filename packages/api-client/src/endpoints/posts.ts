@@ -1,3 +1,4 @@
+import type { Post } from '@blog/types';
 import { authHttp } from '../http/auth-http';
 import { unwrap, unwrapWithMeta } from '../unwrap';
 
@@ -14,8 +15,8 @@ export const postsApi = {
     return unwrapWithMeta<T[]>(status, body);
   },
 
-  async get<T = any>(slug: string) {
+  async get(slug: string) {
     const { status, body } = await authHttp(`/api/posts/${slug}`);
-    return unwrap<T>(status, body);
+    return unwrap<Post>(status, body);
   },
 };
