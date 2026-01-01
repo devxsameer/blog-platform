@@ -8,6 +8,7 @@ export default function CommentItem({ comment }: { comment: CommentNode }) {
   const { user } = useRouteLoaderData('root') as RootLoaderData;
   const fetcher = useFetcher();
   const [isReplying, setIsReplying] = useState(false);
+  const isDeleting = fetcher.state === 'submitting';
 
   const canDelete = user && user.id === comment.author.id;
 
@@ -38,18 +39,19 @@ export default function CommentItem({ comment }: { comment: CommentNode }) {
             </button>
 
             {canDelete && (
-              <fetcher.Form
-                method="post"
-                action={`comments/${comment.id}/delete`}
+              <button
+                type="button"
+                onClick={() =>
+                  fetcher.submit(null, {
+                    action: `comments/${comment.id}/delete`,
+                    method: 'POST',
+                  })
+                }
+                className="btn btn-sm btn-link cursor-pointer text-red-600"
+                disabled={isDeleting}
               >
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-link cursor-pointer text-red-600"
-                  disabled={fetcher.state === 'submitting'}
-                >
-                  {fetcher.state === 'submitting' ? 'Deleting…' : 'Delete'}
-                </button>
-              </fetcher.Form>
+                {isDeleting ? 'Deleting…' : 'Delete'}
+              </button>
             )}
           </div>
         </div>

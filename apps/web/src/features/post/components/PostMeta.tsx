@@ -1,54 +1,80 @@
 import type { Post } from '@blog/types';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
-import { useFetcher } from 'react-router';
+import { useFetcher, useRouteLoaderData } from 'react-router';
+import { format } from 'date-fns';
+import type { RootLoaderData } from '@/app/root.loader';
 
 export default function PostMeta({ post }: { post: Post }) {
-  const [likeCount, setLikesCount] = useState(post.likeCount);
+  const { user } = useRouteLoaderData('root') as RootLoaderData;
+  const [likeCount, setLikeCount] = useState(post.likeCount);
   const [likedByMe, setLikedByMe] = useState(post.likedByMe);
+
   const likeFetcher = useFetcher();
   const isPending = likeFetcher.state !== 'idle';
 
   const toggleLike = () => {
     if (isPending) return;
 
-    // optimistic update
-    setLikedByMe((prev) => !prev);
-    setLikesCount((c) => c + (likedByMe ? -1 : 1));
+    const nextLiked = !likedByMe;
+
+    setLikedByMe(nextLiked);
+    setLikeCount((c) => c + (nextLiked ? 1 : -1));
 
     likeFetcher.submit(null, {
-      method: likedByMe ? 'delete' : 'post',
-      action: `like`,
+      method: nextLiked ? 'POST' : 'DELETE',
+      action: 'like',
     });
   };
 
   useEffect(() => {
-    if (likeFetcher.state === 'idle' && likeFetcher.data instanceof Error) {
-      setLikedByMe(post.likedByMe);
-      setLikesCount(post.likeCount);
-    }
-  }, [likeFetcher.state]);
+    setLikedByMe(post.likedByMe);
+    setLikeCount(post.likeCount);
+  }, [post.likedByMe, post.likeCount]);
 
   return (
-    <div className="text-sm text-gray-500">
-      <span>{post.author.username}</span>
-      {' · '}
-      <time>{new Date(post.createdAt).toLocaleDateString()}</time>
-      <div className="flex gap-4">
-        <button
-          type="button"
-          onClick={toggleLike}
-          disabled={isPending}
-          className={`btn btn-sm btn-circle text-base ${
-            likedByMe ? 'btn-error' : 'text-gray-500'
-          }`}
-        >
-          <HeartIcon className="size-4" />
-        </button>
-        <span className={`flex items-center gap-2 text-base text-gray-500`}>
-          Views: {likeCount}
-          {post.viewCount}
+    <div className="my-2 space-y-4 text-sm text-neutral-600">
+      {/* Author + date */}
+      <div>
+        <span className="font-medium text-neutral-800">
+          {post.author.username}
         </span>
+        {' · '}
+        <time dateTime={post.createdAt}>
+          Published on {format(new Date(post.createdAt), 'MMM d, yyyy')}
+        </time>
+      </div>
+
+      {/* Meta actions */}
+      <div className="flex items-center gap-2">
+        {/* Like Btn */}
+        <div
+          className={!isPending ? 'lg:tooltip lg:tooltip-bottom' : ''}
+          data-tip={
+            !user ? 'Login to like this post' : likedByMe ? 'Unlike' : 'Like'
+          }
+        >
+          <button
+            type="button"
+            onClick={toggleLike}
+            disabled={isPending || !user}
+            aria-pressed={likedByMe}
+            className={`btn btn-sm btn-circle text-base ${
+              likedByMe ? 'btn-error' : 'text-gray-500'
+            }`}
+          >
+            <HeartIcon className="size-4" />
+          </button>
+        </div>
+        {/* Likes */}
+        <div className="text-neutral-500">
+          <span className="font-bold">{likeCount}</span> likes
+        </div>
+        {/* Views */}
+        <div className="text-neutral-500">
+          <span className="font-bold">{post.viewCount.toLocaleString()}</span>{' '}
+          views
+        </div>
       </div>
     </div>
   );

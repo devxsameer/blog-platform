@@ -1,51 +1,57 @@
-// src/shared/components/Breadcrumbs.jsx
-import { ChevronRight } from 'lucide-react';
-import { House } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
+import { House, ChevronRight } from 'lucide-react';
 
-function Breadcrumbs() {
-  const location = useLocation();
-  const pathname = location.pathname; // e.g., /games/123/details
-  const pathParts = pathname.split('/').filter(Boolean); // ["games", "123", "details"]
-  console.error(pathParts);
-  const ignoredSegments = ['post'];
+const LABELS: Record<string, string> = {
+  posts: 'Posts',
+  about: 'About',
+  profile: 'Profile',
+};
+
+export default function Breadcrumbs({
+  dynamicLabel,
+}: {
+  dynamicLabel?: string;
+}) {
+  const { pathname } = useLocation();
+  const segments = pathname.split('/').filter(Boolean);
+
+  // Hide on home
+  if (segments.length === 0) return null;
+
+  let path = '';
 
   return (
-    <nav className="breadcrumbs pb-6 text-sm">
-      <ol className="flex flex-wrap space-x-1 gap-y-1 text-neutral-700">
+    <nav className="pb-6 text-sm">
+      <ol className="flex flex-wrap items-center gap-1 text-neutral-700">
         <li>
-          <Link to="/" className="group flex items-center space-x-1">
-            <House className="mr-2 h-4 w-4 transition-colors group-hover:text-neutral-400" />
-            <span className="transition-colors group-hover:text-neutral-400">
-              Home
-            </span>
-            <ChevronRight className="h-4 w-4 text-neutral-700 transition-colors" />
+          <Link to="/" className="flex items-center gap-1">
+            <House className="h-4 w-4" />
+            <span>Home</span>
           </Link>
         </li>
-        {pathParts.map((part, index) => {
-          if (ignoredSegments.includes(part)) return null;
-          // Build the path up to this breadcrumb
-          const routeTo = `/${pathParts.slice(0, index + 1).join('/')}`;
-          // Make it readable (capitalize and replace dashes)
-          const name = part
-            .replace(/-/g, ' ')
-            .replace(/\b\w/g, (l) => l.toUpperCase());
 
-          // Last part shouldn't be a link
-          const isLast = index === pathParts.length - 1;
+        {segments.map((segment, index) => {
+          path += `/${segment}`;
+          const isLast = index === segments.length - 1;
+
+          const label =
+            isLast && dynamicLabel
+              ? dynamicLabel
+              : (LABELS[segment] ??
+                segment
+                  .replace(/-/g, ' ')
+                  .replace(/\b\w/g, (l) => l.toUpperCase()));
 
           return (
-            <li key={routeTo} className="min-w-max">
-              {!isLast ? (
-                <Link
-                  to={routeTo}
-                  className="group flex items-center space-x-1"
-                >
-                  <span className="group-hover:text-neutral-400">{name}</span>
-                  <ChevronRight className="h-4 w-4 text-neutral-700" />
-                </Link>
+            <li key={path} className="flex items-center gap-1">
+              <ChevronRight className="h-4 w-4 text-neutral-400" />
+
+              {isLast ? (
+                <span className="text-neutral-400">{label}</span>
               ) : (
-                <span className="text-neutral-400">{name}</span>
+                <Link to={path} className="hover:text-neutral-400">
+                  {label}
+                </Link>
               )}
             </li>
           );
@@ -54,5 +60,3 @@ function Breadcrumbs() {
     </nav>
   );
 }
-
-export default Breadcrumbs;

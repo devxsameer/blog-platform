@@ -1,4 +1,5 @@
 // web/src/app/root.loader.ts
+import { redirect } from 'react-router';
 import { tokenStore } from '@blog/token-store';
 import { authStore } from '@/features/auth/auth.store';
 import { authApi } from '@/lib/api';
@@ -20,4 +21,8 @@ export async function rootLoader(): Promise<RootLoaderData> {
     tokenStore.clear();
     return { user: null };
   }
+}
+
+export async function aboutLoader() {
+  return redirect('https://devxsameer.me');
 }

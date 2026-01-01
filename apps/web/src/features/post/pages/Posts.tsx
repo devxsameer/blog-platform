@@ -1,25 +1,59 @@
 import PostList from '@/features/post/components/PostList';
 import type { postsLoader } from '@/features/post/loaders';
-import { useLoaderData, Link } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useLoaderData, useFetcher } from 'react-router';
 
 export default function PostsPage() {
   const { data, meta } = useLoaderData() as Awaited<
     ReturnType<typeof postsLoader>
   >;
+  const fetcher = useFetcher<Awaited<ReturnType<typeof postsLoader>>>({
+    key: 'posts-pagination',
+  });
+
+  const [posts, setPosts] = useState(data);
+  const [cursor, setCursor] = useState(meta?.nextCursor);
+
+  useEffect(() => {
+    if (!fetcher.data) return;
+
+    setPosts((prev) => [...prev, ...(fetcher?.data?.data ?? [])]);
+    setCursor(fetcher.data.meta?.nextCursor);
+  }, [fetcher.data]);
+
+  const loadMore = () => {
+    if (!cursor || fetcher.state !== 'idle') return;
+
+    fetcher.submit(
+      { cursor },
+      {
+        method: 'get',
+        action: '.',
+      },
+    );
+  };
 
   return (
-    <div>
-      <h1 className="text-4xl font-semibold">Writing</h1>
+    <div className="flex gap-8">
+      <div className="max-w-3xl">
+        <h1 className="text-3xl font-semibold">Writing</h1>
 
-      <PostList posts={data} />
+        <PostList posts={posts} />
 
-      {meta?.nextCursor && (
-        <div className="mt-10">
-          <Link to={`?cursor=${meta.nextCursor}`} className="text-sm underline">
-            Load more
-          </Link>
-        </div>
-      )}
+        {cursor && (
+          <div className="mt-10 flex justify-center">
+            <button
+              disabled={fetcher.state !== 'idle'}
+              onClick={loadMore}
+              type="button"
+              className="btn btn-block max-w-sm"
+            >
+              {fetcher.state === 'loading' ? 'Loading…' : 'Show more'}
+            </button>
+          </div>
+        )}
+      </div>
+      <div></div>
     </div>
   );
 }

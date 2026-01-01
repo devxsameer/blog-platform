@@ -30,6 +30,7 @@ export default function CommentForm({
       <textarea
         name="content"
         ref={textareaRef}
+        disabled={isSubmitting}
         required
         className="textarea w-full"
         placeholder={parentId ? 'Write a reply…' : 'Write a comment…'}

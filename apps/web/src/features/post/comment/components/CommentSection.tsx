@@ -1,28 +1,12 @@
-import { Link, useFetcher, useParams, useRouteLoaderData } from 'react-router';
+import { Link, useRouteLoaderData } from 'react-router';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import type { RootLoaderData } from '@/app/root.loader';
-import { useEffect, useState } from 'react';
 import { buildTree } from '../utils';
 import type { Comment } from '../types';
 
-export default function CommentsSection() {
+export default function CommentsSection({ comments }: { comments: Comment[] }) {
   const { user } = useRouteLoaderData('root') as RootLoaderData;
-  const [comments, setComments] = useState<Comment[]>([]);
-  const { postSlug } = useParams();
-  const fetcher = useFetcher<{ comments: Comment[] }>();
-
-  useEffect(() => {
-    fetcher.load(`/posts/${postSlug}/comments`);
-  }, [postSlug]);
-
-  useEffect(() => {
-    if (!fetcher.data) return;
-
-    if (fetcher.data.comments) {
-      setComments((prev) => [...prev, ...(fetcher.data?.comments ?? [])]);
-    }
-  }, [fetcher.data]);
 
   const tree = buildTree(comments);
 

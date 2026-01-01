@@ -7,12 +7,11 @@ import {
   logoutAction,
   signupAction,
 } from '@/features/auth/auth.actions';
-import { rootLoader } from './root.loader';
+import { aboutLoader, rootLoader } from './root.loader';
 import AuthLayout from '@/layouts/AuthLayout';
 import LoginPage from '@/features/auth/pages/Login';
 import SignupPage from '@/features/auth/pages/Signup';
 import { ErrorPage } from '@/pages/Error';
-import AboutPage from '@/pages/About';
 import ProfilePage from '@/pages/Profile';
 import { requireAuth } from '@/features/auth/auth.loaders';
 import { postRoute } from '@/features/post/route';
@@ -40,7 +39,7 @@ export const router = createBrowserRouter([
             ],
           },
           { path: 'profile', Component: ProfilePage, loader: requireAuth },
-          { path: 'about', Component: AboutPage },
+          { path: 'about', loader: aboutLoader },
           postRoute,
           { path: '*', element: <ErrorPage /> },
         ],

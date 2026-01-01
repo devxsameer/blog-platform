@@ -1,17 +1,17 @@
 // web/src/features/post/loaders.ts
-import { postsApi } from '@blog/api-client';
+import { commentsApi, postsApi } from '@blog/api-client';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export async function postLoader({ params }: LoaderFunctionArgs) {
-  const slug = params.postSlug;
-
-  if (!slug) {
+  if (!params.postSlug) {
     throw new Response('Not Found', { status: 404 });
   }
 
   try {
-    const post = await postsApi.get(slug);
-    return { post };
+    const post = await postsApi.get(params.postSlug);
+    const comments = commentsApi.listByPost(params.postSlug);
+
+    return { post, comments };
   } catch (err: any) {
     if (err.status === 404) {
       throw new Response('Post not found', { status: 404 });
