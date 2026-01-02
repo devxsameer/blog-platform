@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @plugin 'daisyui' {
-  themes:
-    light --default,
-    black --prefersdark;
+  themes: light --default;
 }
 
 /* Outfit Variable Font */
