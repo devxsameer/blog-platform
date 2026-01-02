@@ -1,4 +1,5 @@
 import { MdSpaceDashboard } from 'react-icons/md';
+import { NavLink } from 'react-router';
 
 function Sidebar() {
   return (
@@ -17,13 +18,11 @@ function Sidebar() {
             </a>
           </div>
           <ul className="menu flex-1 p-4">
-            {/* Sidebar content here */}
-
             <li>
-              <a>Sidebar Item 1</a>
+              <NavLink to={'/'}>Home</NavLink>
             </li>
             <li>
-              <a>Sidebar Item 2</a>
+              <NavLink to={'/profile'}>Profile</NavLink>
             </li>
           </ul>
         </div>
