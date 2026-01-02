@@ -8,12 +8,6 @@
       "default": "./src/index.ts"
     }
   },
-  "prettier": "@blog/prettier-config",
-  "devDependencies": {
-    "@blog/prettier-config": "workspace:*",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.2"
-  },
   "dependencies": {
     "@blog/token-store": "workspace:*",
     "@blog/types": "workspace:*"

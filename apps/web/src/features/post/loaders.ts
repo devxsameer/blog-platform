@@ -1,5 +1,5 @@
 // web/src/features/post/loaders.ts
-import { commentsApi, postsApi } from '@blog/api-client';
+import { commentsApi, postsApi, tagsApi } from '@blog/api-client';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export async function postLoader({ params }: LoaderFunctionArgs) {
@@ -27,12 +27,13 @@ export async function postsLoader({ request }: LoaderFunctionArgs) {
   const cursor = url.searchParams.get('cursor') ?? undefined;
 
   try {
-    const result = await postsApi.list({
+    const postsData = await postsApi.list({
       cursor,
       limit: 10,
     });
+    const tags = tagsApi.getPopular();
 
-    return result;
+    return { postsData, tags };
   } catch (err: any) {
     throw new Response('Failed to load posts', { status: 500 });
   }

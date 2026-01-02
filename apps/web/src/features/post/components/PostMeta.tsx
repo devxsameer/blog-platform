@@ -1,11 +1,11 @@
-import type { Post } from '@blog/types';
+import type { PostContent } from '@blog/types';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
-import { useFetcher, useRouteLoaderData } from 'react-router';
+import { useFetcher, useRouteLoaderData, Link } from 'react-router';
 import { format } from 'date-fns';
 import type { RootLoaderData } from '@/app/root.loader';
 
-export default function PostMeta({ post }: { post: Post }) {
+export default function PostMeta({ post }: { post: PostContent }) {
   const { user } = useRouteLoaderData('root') as RootLoaderData;
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [likedByMe, setLikedByMe] = useState(post.likedByMe);
@@ -34,6 +34,19 @@ export default function PostMeta({ post }: { post: Post }) {
 
   return (
     <div className="my-2 space-y-4 text-sm text-neutral-600">
+      {/* Tags */}
+      {post.tags && post.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((tag) => (
+            <Link
+              key={tag.id}
+              to={`/posts?tag=${encodeURIComponent(tag.name)}`}
+            >
+              <div className="badge badge-sm badge-neutral">{tag.name}</div>
+            </Link>
+          ))}
+        </div>
+      )}
       {/* Author + date */}
       <div>
         <span className="font-medium text-neutral-800">

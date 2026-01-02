@@ -4,13 +4,13 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
 import PostMeta from './PostMeta';
-import type { Post } from '@blog/types';
+import type { PostContent } from '@blog/types';
 import { useEffect } from 'react';
 import { createHeadingRenderer } from './MarkdownHeading';
 import { useTableOfContents } from '../useTableOfContents';
 import TableOfContents from './TableOfContents';
 
-export default function PostContent({ post }: { post: Post }) {
+export default function PostContent({ post }: { post: PostContent }) {
   const { toc, register, reset } = useTableOfContents();
 
   useEffect(() => {

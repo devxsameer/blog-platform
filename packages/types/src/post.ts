@@ -1,4 +1,6 @@
-export type Post = {
+import type { Tag } from './tag';
+
+export type PostContent = {
   id: string;
   authorId: string;
   title: string;
@@ -12,6 +14,7 @@ export type Post = {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  tags?: Tag[];
   author: {
     username: string;
     avatarUrl?: string | null;

@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react';
 import { useLoaderData, useFetcher } from 'react-router';
 
 export default function PostsPage() {
-  const { data, meta } = useLoaderData() as Awaited<
+  const { postsData, tags } = useLoaderData() as Awaited<
     ReturnType<typeof postsLoader>
   >;
   const fetcher = useFetcher<Awaited<ReturnType<typeof postsLoader>>>({
     key: 'posts-pagination',
   });
 
-  const [posts, setPosts] = useState(data);
-  const [cursor, setCursor] = useState(meta?.nextCursor);
+  const [posts, setPosts] = useState(postsData.data);
+  const [cursor, setCursor] = useState(postsData.meta?.nextCursor);
 
   useEffect(() => {
     if (!fetcher.data) return;
 
-    setPosts((prev) => [...prev, ...(fetcher?.data?.data ?? [])]);
-    setCursor(fetcher.data.meta?.nextCursor);
+    setPosts((prev) => [...prev, ...(fetcher?.data?.postsData.data ?? [])]);
+    setCursor(fetcher.data.postsData.meta?.nextCursor);
   }, [fetcher.data]);
 
   const loadMore = () => {
@@ -53,7 +53,9 @@ export default function PostsPage() {
           </div>
         )}
       </div>
-      <div></div>
+      <div>
+        
+      </div>
     </div>
   );
 }
