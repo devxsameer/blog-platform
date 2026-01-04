@@ -24,19 +24,16 @@ export function unwrap<T>(status: number, body: any): T {
   throw new ApiClientError(code ?? 'UNKNOWN_ERROR', status, message);
 }
 
-export function unwrapWithMeta<T>(
-  status: number,
-  body: any,
-): { data: T; meta?: any } {
+export function unwrapWithMeta<T>(status: number, body: any): T {
   if (!body) {
     throw new ApiClientError('INVALID_RESPONSE', status, 'Empty body');
   }
 
   if (body.success === true) {
     return {
-      data: body.data as T,
+      data: body.data,
       meta: body.meta,
-    };
+    } as T;
   }
 
   const { code, message, issues } = body.error ?? {};

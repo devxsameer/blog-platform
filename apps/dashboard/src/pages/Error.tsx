@@ -1,35 +1,80 @@
-import { BiSolidError } from 'react-icons/bi';
-import { Link } from 'react-router';
+import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router';
+import { HiArrowLeft, HiHome } from 'react-icons/hi';
 
-export default function ErrorPage() {
+function ErrorPage() {
+  const error = useRouteError();
+  const navigate = useNavigate();
+
+  let statusCode = 500;
+  let title = 'Unexpected Error';
+  let message =
+    'An error occurred while loading this page. Please try again later.';
+
+  if (isRouteErrorResponse(error)) {
+    statusCode = error.status;
+    message = error.statusText || error.data?.message || message;
+
+    if (error.status === 404) {
+      title = 'Page Not Found';
+      message = "The dashboard page you are looking for doesn't exist.";
+    } else if (error.status === 401) {
+      title = 'Unauthorized';
+      message = "You don't have permission to view this section.";
+    }
+  } else if (error instanceof Error) {
+    message = error.message;
+  }
+
   return (
-    <div className="bg-base-200 font-outfit flex min-h-screen items-center justify-center px-4">
-      <div className="card bg-base-100 w-full max-w-md shadow-xl">
-        <div className="card-body items-center gap-4 text-center">
-          {/* Icon / Visual */}
-          <div className="flex items-center gap-4">
-            <span className="text-7xl">
-              <BiSolidError />
-            </span>
-            {/* Text */}
-            <h1 className="text-5xl font-bold tracking-tight">404</h1>
-          </div>
+    <div className="mt-18 flex flex-col items-center justify-center text-center">
+      {/* Visual Indicator */}
+      <div className="mb-3">
+        <h1 className="text-error/20 text-9xl font-bold select-none">
+          {statusCode}
+        </h1>
+      </div>
 
-          <h2 className="text-2xl font-semibold">Page not found</h2>
+      <h2 className="text-base-content mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        {title}
+      </h2>
+      <p className="text-base-content/70 text-md mt-4 max-w-md leading-7">
+        {message}
+      </p>
 
-          <p className="text-base-content/60 max-w-sm">
-            The page you're looking for doesn't exist or was moved. Maybe the
-            link took a coffee break ☕
-          </p>
+      {/* Action Buttons */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <button onClick={() => navigate(-1)} className="btn btn-outline gap-2">
+          <HiArrowLeft className="text-lg" /> Go Back
+        </button>
 
-          {/* Actions */}
-          <div className="card-actions w-full pt-2">
-            <Link to="/" className="btn btn-neutral btn-block">
-              Back to Home
-            </Link>
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="btn btn-neutral gap-2"
+        >
+          <HiHome className="text-lg" /> Dashboard Home
+        </button>
+      </div>
+
+      {/* Technical Details (Only in development) */}
+      {import.meta.env.DEV && (
+        <div className="mt-12 w-full max-w-2xl text-left">
+          <div className="collapse-arrow bg-base-200 border-base-300 collapse border">
+            <input type="checkbox" />
+            <div className="collapse-title font-mono text-sm">
+              Technical Stack Trace (Dev Only)
+            </div>
+            <div className="collapse-content overflow-x-auto">
+              <pre className="bg-base-300 rounded-lg p-4 font-mono text-xs">
+                {error instanceof Error
+                  ? error.stack
+                  : JSON.stringify(error, null, 2)}
+              </pre>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
+
+export default ErrorPage;

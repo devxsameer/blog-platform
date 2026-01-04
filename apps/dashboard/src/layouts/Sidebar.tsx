@@ -5,6 +5,21 @@ import { MdSpaceDashboard } from 'react-icons/md';
 import { NavLink } from 'react-router';
 
 function Sidebar() {
+  const navLinks = [
+    { to: '/dashboard', label: 'Home', icon: <AiFillHome />, end: true },
+    {
+      to: '/dashboard/posts',
+      label: 'Posts',
+      icon: <MdSpaceDashboard />,
+      end: false,
+    },
+    {
+      to: '/dashboard/profile',
+      label: 'Profile',
+      icon: <FaUser />,
+      end: false,
+    },
+  ];
   return (
     <>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -21,41 +36,35 @@ function Sidebar() {
             </a>
           </div>
           <div className="p-2">
-            <button type="button" className="btn btn-block btn-neutral">
+            <NavLink
+              to={'/dashboard/posts/create'}
+              className={({ isActive }) =>
+                `btn btn-block btn-neutral ${isActive ? 'btn-disabled' : ''}`
+              }
+            >
               Create post <IoMdCreate />
-            </button>
+            </NavLink>
           </div>
           <div className="menu flex w-full gap-2 p-2">
-            <NavLink
-              className={({ isActive }) =>
-                `btn btn-block ${isActive ? '' : 'btn-ghost'} justify-start`
-              }
-              to={'/'}
-            >
-              {({ isActive }) => (
-                <>
-                  <span className={isActive ? 'text-secondary' : ''}>
-                    <AiFillHome />
-                  </span>
-                  Home
-                </>
-              )}
-            </NavLink>
-            <NavLink
-              className={({ isActive }) =>
-                `btn btn-block ${isActive ? '' : 'btn-ghost'} justify-start`
-              }
-              to={'/profile'}
-            >
-              {({ isActive }) => (
-                <>
-                  <span className={isActive ? 'text-secondary' : ''}>
-                    <FaUser />
-                  </span>
-                  Profile
-                </>
-              )}
-            </NavLink>
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                className={({ isActive }) =>
+                  `btn btn-block ${isActive ? 'bg-base-200' : 'btn-ghost'} justify-start`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={isActive ? 'text-secondary' : ''}>
+                      {link.icon}
+                    </span>
+                    {link.label}
+                  </>
+                )}
+              </NavLink>
+            ))}
           </div>
         </div>
       </div>

@@ -1,5 +1,11 @@
 import type { Tag } from './tag';
 
+export type PostStatus = 'draft' | 'published' | 'archived';
+
+export type PostOrder = 'asc' | 'desc';
+
+export type PostSort = 'createdAt' | 'updatedAt' | 'publishedAt';
+
 export type PostContent = {
   id: string;
   authorId: string;
@@ -10,7 +16,7 @@ export type PostContent = {
   contentHtml: string | null;
   viewCount: number;
   likeCount: number;
-  status: 'published' | 'draft' | 'archived';
+  status: PostStatus;
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -21,4 +27,21 @@ export type PostContent = {
     bio?: string | null;
   };
   likedByMe: boolean;
+};
+
+export type PostInput = {
+  title: string;
+  excerpt?: string | null;
+  contentMarkdown: string;
+  status: PostStatus;
+  tags?: string[];
+};
+
+export type PostsQuery = {
+  cursor?: string;
+  limit?: number;
+  authorId?: string;
+  order?: PostOrder;
+  sort?: PostSort;
+  status?: PostStatus;
 };

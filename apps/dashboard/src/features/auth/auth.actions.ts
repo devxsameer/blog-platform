@@ -6,10 +6,12 @@ import { authStore } from './auth.store';
 import { authApi, ValidationError } from '@blog/api-client';
 
 export async function loginAction({ request }: ActionFunctionArgs) {
-  const input = Object.fromEntries(await request.formData());
+  const formData = await request.formData();
+  const email = formData.get('email')?.toString() ?? '';
+  const password = formData.get('password')?.toString() ?? '';
 
   try {
-    const res = await authApi.login(input);
+    const res = await authApi.login({ email, password });
     tokenStore.set(res.accessToken);
     authStore.setUser(res.user);
     throw redirect('/');
