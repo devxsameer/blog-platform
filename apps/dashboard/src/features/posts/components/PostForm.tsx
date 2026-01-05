@@ -48,7 +48,7 @@ function PostForm({ initialValues = {}, mode }: PostFormProps) {
         status,
         tags,
       },
-      { method: 'POST', action: '/posts' },
+      { method: 'POST', action: '/dashboard/posts' },
     );
   }
 

@@ -1,6 +1,6 @@
 // dashboard/src/app/router.tsx
 import { loginAction } from '@/features/auth/auth.actions';
-import { loginLoader, rootLoader } from '@/features/auth/auth.loaders';
+import { loginLoader } from '@/features/auth/auth.loaders';
 import LoginPage from '@/features/auth/pages/Login';
 import { postRoute } from '@/features/posts/post.route';
 import { DashBoardLayout } from '@/layouts/dashboard-layout';
@@ -9,6 +9,7 @@ import ProfilePage from '@/pages/Profile';
 import { createBrowserRouter, redirect } from 'react-router';
 import RootErrorPage from '@/pages/RootError';
 import ErrorPage from '@/pages/Error';
+import { rootLoader } from './root.loader';
 
 export const router = createBrowserRouter([
   {

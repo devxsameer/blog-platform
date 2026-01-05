@@ -1,8 +1,9 @@
 import { useLoaderData } from 'react-router';
 import PostForm from '../components/PostForm';
+import { postLoader } from '../post.loaders';
 
 function EditPostPage() {
-  const { post } = useLoaderData();
+  const { post } = useLoaderData<Awaited<ReturnType<typeof postLoader>>>();
 
   return (
     <div className="space-y-6">

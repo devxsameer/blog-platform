@@ -1,9 +1,12 @@
 import { ApiClientError, postsApi } from '@blog/api-client';
 import type { PostOrder, PostSort, PostsQuery, PostStatus } from '@blog/types';
 import type { LoaderFunctionArgs } from 'react-router';
+import { initAuthOnce } from '../auth/init-auth-once';
 
 export async function postsLoader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
+
+  await initAuthOnce();
 
   const searchQuery: PostsQuery = {
     cursor: url.searchParams.get('cursor') ?? undefined,
@@ -21,5 +24,26 @@ export async function postsLoader({ request }: LoaderFunctionArgs) {
       throw new Response('Failed to load posts', { status: 500 });
     }
     throw new Response('Failed to load posts', { status: 500 });
+  }
+}
+export async function postLoader({ params }: LoaderFunctionArgs) {
+  if (!params.postSlug) {
+    throw new Response('Not Found', { status: 404 });
+  }
+
+  await initAuthOnce();
+
+  try {
+    const post = await postsApi.get(params.postSlug);
+
+    return { post };
+  } catch (err) {
+    console.error(err);
+    if (err instanceof ApiClientError) {
+      if (err.status === 404) {
+        throw new Response('Post not found', { status: 404 });
+      }
+    }
+    throw new Response('Failed to load post', { status: 500 });
   }
 }

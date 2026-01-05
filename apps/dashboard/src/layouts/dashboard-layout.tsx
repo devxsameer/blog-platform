@@ -14,9 +14,6 @@ export function DashBoardLayout() {
       <div className="drawer lg:drawer-open">
         <div className="drawer-content bg-base-200 flex flex-col">
           <Header />
-          {isPageLoading && (
-            <div className="bg-neutral z-50 h-1 w-full animate-pulse" />
-          )}
           <div className="min-h-screen p-6 max-md:p-4">
             {isPageLoading ? <SkeletonLoader /> : <Outlet />}
           </div>

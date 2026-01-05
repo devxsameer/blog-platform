@@ -1,4 +1,4 @@
-import type { rootLoader } from '@/features/auth/auth.loaders';
+import type { rootLoader } from '@/app/root.loader';
 import { Link, useRouteLoaderData } from 'react-router';
 
 function Header() {
@@ -8,9 +8,7 @@ function Header() {
 
   return (
     <div className="navbar bg-base-100 border-base-300 text-base-content border-b-2">
-      <div className="flex-1">
-        <a className="btn btn-ghost btn-lg">Search</a>
-      </div>
+      <div className="flex-1"></div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
           <button

@@ -5,14 +5,16 @@ let user: User | null = null;
 export const authStore = {
   getUser: () => user,
   setUser: (u: User | null) => (user = u),
+
   isAuthed: () => {
-    if (user?.role) {
-      if (user.role === 'admin' || user.role === 'author') {
-        return true;
-      }
-    }
-    return false;
+    return !!user;
   },
+  hasRole: (role: User['role']) => {
+    return user?.role === role;
+  },
+  isAdmin: () => user?.role === 'admin',
+
+  isAuthor: () => user?.role === 'author',
   clear() {
     user = null;
   },

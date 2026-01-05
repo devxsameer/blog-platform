@@ -26,6 +26,7 @@ export const postsApi = {
     const search = new URLSearchParams();
 
     if (params?.cursor) search.set('cursor', params.cursor);
+    if (params?.status) search.set('status', params.status);
     if (params?.authorId) search.set('authorId', params.authorId);
     if (params?.order) search.set('order', params.order);
     if (params?.sort) search.set('sort', params.sort);
@@ -52,6 +53,12 @@ export const postsApi = {
       body: JSON.stringify(input),
     });
     return unwrap<PostContent>(status, body);
+  },
+  async delete(slug: string) {
+    const { status, body } = await authHttp(`/api/posts/${slug}`, {
+      method: 'DELETE',
+    });
+    return unwrap(status, body);
   },
 
   async like(slug: string) {

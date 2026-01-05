@@ -24,3 +24,12 @@ export async function createPostAction({ request }: ActionFunctionArgs) {
     throw error;
   }
 }
+export async function deletePostAction({ params }: ActionFunctionArgs) {
+  if (!params.postSlug) {
+    throw new Response('Bad Request', { status: 400 });
+  }
+
+  await postsApi.delete(params.postSlug);
+
+  return null;
+}
