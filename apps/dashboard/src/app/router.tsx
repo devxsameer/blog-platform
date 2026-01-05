@@ -1,15 +1,16 @@
 // dashboard/src/app/router.tsx
-import { loginAction } from '@/features/auth/auth.actions';
+import { loginAction, logoutAction } from '@/features/auth/auth.actions';
 import { loginLoader } from '@/features/auth/auth.loaders';
 import LoginPage from '@/features/auth/pages/Login';
 import { postRoute } from '@/features/posts/post.route';
 import { DashBoardLayout } from '@/layouts/dashboard-layout';
-import Dashboard from '@/pages/Dashboard';
+import Dashboard from '@/features/dashboard/pages/Dashboard';
 import ProfilePage from '@/pages/Profile';
 import { createBrowserRouter, redirect } from 'react-router';
 import RootErrorPage from '@/pages/RootError';
 import ErrorPage from '@/pages/Error';
 import { rootLoader } from './root.loader';
+import { dashboardLoader } from '@/features/dashboard/dashboard.loaders';
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +27,12 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         Component: DashBoardLayout,
         children: [
-          { index: true, Component: Dashboard, ErrorBoundary: ErrorPage },
+          {
+            index: true,
+            loader: dashboardLoader,
+            Component: Dashboard,
+            ErrorBoundary: ErrorPage,
+          },
           { path: 'profile', Component: ProfilePage, ErrorBoundary: ErrorPage },
           postRoute,
         ],
@@ -39,5 +45,6 @@ export const router = createBrowserRouter([
     action: loginAction,
     loader: loginLoader,
   },
+  { path: '/logout', action: logoutAction },
   { path: '*', loader: () => redirect('/') },
 ]);

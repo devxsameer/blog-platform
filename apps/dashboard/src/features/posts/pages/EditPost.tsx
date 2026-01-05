@@ -7,20 +7,19 @@ function EditPostPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">
-        Edit Post
-        <span className="badge badge-outline ml-2">{post.status}</span>
-      </h1>
+      {/* Header */}
+      <header className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight">Edit post</h1>
+          <span className="badge badge-outline capitalize">{post.status}</span>
+        </div>
 
-      <PostForm
-        mode="edit"
-        initialValues={{
-          title: post.title,
-          excerpt: post.excerpt,
-          contentMarkdown: post.contentMarkdown,
-          status: post.status,
-        }}
-      />
+        <p className="text-base-content/70">
+          Update content, status, or manage this post.
+        </p>
+      </header>
+
+      <PostForm mode="edit" initialValues={post} />
     </div>
   );
 }

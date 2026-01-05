@@ -1,192 +1,178 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import type { PostStatus } from '@blog/types';
+import type { ValidationIssue } from '@blog/api-client';
+
 import MarkdownEditor from './MarkdownEditor';
 import TagInput from './TagInput';
-import type { PostFormProps } from '../post.types';
-import type { PostStatus } from '@blog/types';
 import { generateSlug } from '@/shared/utils/slug';
-import { useFetcher } from 'react-router';
-import type { ValidationIssue } from '@blog/api-client';
-import type { createPostAction } from '../post.actions';
+import type { PostFormProps } from '../post.types';
+import { usePostForm } from '../hooks/usePostForm';
+import PostSuccessModal from './PostSucessModal';
 
-function PostForm({ initialValues = {}, mode }: PostFormProps) {
-  const [title, setTitle] = useState(initialValues.title ?? '');
-  const [slug, setSlug] = useState('');
-  const [excerpt, setExcerpt] = useState(initialValues.excerpt ?? '');
-  const [tags, setTags] = useState<string[]>(initialValues.tags ?? []);
+export default function PostForm({ initialValues, mode }: PostFormProps) {
+  const [title, setTitle] = useState(initialValues?.title ?? '');
+  const [slug, setSlug] = useState(initialValues?.slug ?? '');
+  const [excerpt, setExcerpt] = useState(initialValues?.excerpt ?? '');
+  const [tags, setTags] = useState<string[]>(
+    initialValues?.tags?.map((t) => t.name) ?? [],
+  );
   const [contentMarkdown, setContentMarkdown] = useState(
-    initialValues.contentMarkdown ?? '',
+    initialValues?.contentMarkdown ?? '',
   );
   const [status, setStatus] = useState<PostStatus>(
-    initialValues.status ?? 'draft',
+    initialValues?.status ?? 'draft',
   );
-  const fetcher = useFetcher<Awaited<ReturnType<typeof createPostAction>>>();
-  const actionData = fetcher.data;
-  const isSubmitting = fetcher.state === 'submitting';
-  const modalRef = useRef<HTMLDialogElement>(null);
+
+  const { submit, fetcher, isSubmitting, showSuccess, closeSuccess } =
+    usePostForm(mode, initialValues?.slug);
+
+  const isArchived = status === 'archived';
+  const canEditContent = !isArchived;
 
   function handleTitleChange(value: string) {
     setTitle(value);
-    if (mode === 'create') {
-      setSlug(generateSlug(value));
-    }
+    if (mode === 'create') setSlug(generateSlug(value));
   }
-  useEffect(() => {
-    if (actionData?.success) {
-      if (actionData?.success) {
-        modalRef.current?.showModal();
-      }
-    }
-  }, [actionData]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    fetcher.submit(
-      {
-        title,
-        excerpt: excerpt || null,
-        contentMarkdown,
-        status,
-        tags,
-      },
-      { method: 'POST', action: '/dashboard/posts' },
-    );
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('contentMarkdown', contentMarkdown);
+    formData.append('status', status);
+    if (excerpt) formData.append('excerpt', excerpt);
+
+    tags.forEach((tag) => {
+      formData.append('tags', tag.trim().toLowerCase());
+    });
+
+    submit(formData);
   }
 
-  const isArchived = status === 'archived';
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {actionData?.success && (
-        <>
-          <dialog ref={modalRef} className="modal">
-            <div className="modal-box">
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">
-                  ✕
-                </button>
-              </form>
-              <h3 className="text-lg font-bold">Post Create SuccessFully!</h3>
-              <p className="py-4">
-                Press ESC key or click on ✕ button to close
+    <>
+      <PostSuccessModal
+        open={showSuccess}
+        mode={mode}
+        slug={fetcher.data?.post?.slug}
+        onClose={closeSuccess}
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Archived notice */}
+        {isArchived && (
+          <div className="alert alert-warning">
+            This post is archived. You can unarchive it, but content cannot be
+            edited while archived.
+          </div>
+        )}
+
+        {/* Validation errors */}
+        {fetcher.data?.error?.issues && (
+          <div className="space-y-1">
+            {fetcher.data.error.issues.map((issue: ValidationIssue) => (
+              <p key={issue.path} className="text-sm text-red-500">
+                {issue.path}: {issue.message}
               </p>
-              <button className="btn btn-neutral">View Post</button>
+            ))}
+          </div>
+        )}
+
+        {/* Main form */}
+        <div className="flex flex-wrap gap-6">
+          <div className="card bg-base-100 flex-3 shadow-sm">
+            <div className="card-body space-y-4">
+              <label className="fieldset">
+                <span className="fieldset-label font-semibold">Title *</span>
+                <input
+                  className="input w-full"
+                  value={title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  disabled={!canEditContent}
+                  required
+                />
+              </label>
+
+              <label className="fieldset">
+                <span className="fieldset-label font-semibold">Slug</span>
+                <input className="input w-full" value={slug} disabled />
+              </label>
+
+              <label className="fieldset">
+                <span className="fieldset-label font-semibold">Summary</span>
+                <textarea
+                  className="textarea textarea-bordered"
+                  rows={3}
+                  value={excerpt}
+                  onChange={(e) => setExcerpt(e.target.value)}
+                  disabled={!canEditContent}
+                />
+              </label>
             </div>
-          </dialog>
-        </>
-      )}
-
-      <div className="flex flex-wrap justify-stretch gap-6">
-        <div className="card bg-base-100 min-w-prose min-w-prose flex-3 shadow-sm">
-          <div className="card-body">
-            {!actionData?.success &&
-              actionData?.error?.issues &&
-              actionData.error.issues.length > 0 && (
-                <div className="mb-2">
-                  {actionData?.error?.issues?.map((issue: ValidationIssue) => (
-                    <p key={issue.path} className="text-red-500">
-                      {issue.path}: {issue.message}
-                    </p>
-                  ))}
-                </div>
-              )}
-            {/* Title */}
-            <label className="fieldset">
-              <span className="fieldset-label font-semibold">Title *</span>
-              <input
-                className="input w-full"
-                value={title}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                disabled={isArchived}
-                required
-              />
-            </label>
-
-            {/* Slug */}
-            <label className="fieldset">
-              <span className="fieldset-label font-semibold">Slug</span>
-              <input value={slug} className="input w-full" disabled={true} />
-              <span className="label">
-                Slug is generated in backend automatically with xxxxx 5 chars
-                nano id{' '}
-              </span>
-            </label>
-
-            <label className="fieldset">
-              {/* Excerpt */}
-              <span className="fieldset-label font-semibold">Summary</span>
-              <textarea
-                className="textarea textarea-bordered"
-                rows={3}
-                value={excerpt}
-                onChange={(e) => setExcerpt(e.target.value)}
-                placeholder="Optional summary"
-                disabled={isArchived}
-              />
-            </label>
           </div>
-        </div>
-        <div className="card bg-base-100 min-w-xs flex-1 shadow-sm">
-          <div className="card-body space-y-4">
-            {/* Tags */}
-            <label className="fieldset">
-              <div>
+
+          <div className="card bg-base-100 flex-1 shadow-sm">
+            <div className="card-body space-y-4">
+              <label className="fieldset">
                 <span className="fieldset-label font-semibold">Tags</span>
-                <span className="label">(optional)</span>
-              </div>
-              <TagInput value={tags} onChange={setTags} />
-            </label>
+                <TagInput
+                  value={tags}
+                  onChange={setTags}
+                  maxTags={10}
+                  disabled={!canEditContent}
+                />
+              </label>
 
-            {/* Status */}
+              <label className="fieldset">
+                <span className="fieldset-label font-semibold">Status *</span>
+                <select
+                  className="select"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as PostStatus)}
+                >
+                  <option value="draft">Draft</option>
+
+                  {!isArchived && <option value="published">Published</option>}
+
+                  <option value="archived">Archived</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="card bg-base-100 shadow-sm">
+          <div className="card-body">
             <label className="fieldset">
-              <label className="fieldset-label font-semibold">Status *</label>
-              <select
-                className="select"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as PostStatus)}
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-                <option value="archived">Archived</option>
-              </select>
+              <span className="fieldset-label font-semibold">
+                Content Markdown
+              </span>
+              <MarkdownEditor
+                value={contentMarkdown}
+                onChange={setContentMarkdown}
+                disabled={!canEditContent}
+              />
             </label>
           </div>
         </div>
-      </div>
-      <div className="card bg-base-100 shadow-sm">
-        <div className="card-body">
-          <label className="fieldset">
-            {/* Content */}
-            <span className="fieldset-label font-semibold">
-              Content Markdown
-            </span>
-            <MarkdownEditor
-              value={contentMarkdown}
-              onChange={setContentMarkdown}
-            />
-          </label>
-        </div>
-      </div>
 
-      {/* Actions */}
-      <div className="card-actions justify-end">
-        <button
-          type="submit"
-          className="btn btn-neutral"
-          disabled={isArchived || isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <span className="loading loading-ball loading-xs"></span>Saving…
-            </>
-          ) : mode === 'create' ? (
-            'Create Post'
-          ) : (
-            'Save Changes'
-          )}
-        </button>
-      </div>
-    </form>
+        {/* Actions */}
+        <div className="card-actions justify-end">
+          <button
+            type="submit"
+            className="btn btn-neutral"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? 'Saving…'
+              : mode === 'create'
+                ? 'Create Post'
+                : 'Save Changes'}
+          </button>
+        </div>
+      </form>
+    </>
   );
 }
-
-export default PostForm;

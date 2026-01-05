@@ -5,31 +5,65 @@ import type { ActionFunctionArgs } from 'react-router';
 export async function createPostAction({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
-  const postInput = {
+  const postInput: PostInput = {
     title: formData.get('title')?.toString() ?? '',
     contentMarkdown: formData.get('contentMarkdown')?.toString() ?? '',
     excerpt: formData.get('excerpt')?.toString() ?? null,
     status: formData.get('status')?.toString() as PostStatus,
-    tags: formData.getAll('tags').map((t) => t.toString()),
-  } as PostInput;
+    tags: formData
+      .getAll('tags')
+      .map((t) => t.toString().trim())
+      .filter((t) => t !== ''),
+  };
 
   try {
     const post = await postsApi.create(postInput);
-
     return { success: true, post };
   } catch (error) {
     if (error instanceof ValidationError) {
-      return { success: false, error: error };
+      return { success: false, error };
     }
     throw error;
   }
 }
+
+export async function updatePostAction({
+  request,
+  params,
+}: ActionFunctionArgs) {
+  if (!params.postSlug) {
+    throw new Response('Bad Request', { status: 400 });
+  }
+
+  const formData = await request.formData();
+
+  const updateInput = {
+    title: formData.get('title')?.toString(),
+    contentMarkdown: formData.get('contentMarkdown')?.toString(),
+    excerpt: formData.get('excerpt')?.toString() ?? null,
+    status: formData.get('status')?.toString() as PostStatus,
+    tags: formData
+      .getAll('tags')
+      .map((t) => t.toString().trim())
+      .filter((t) => t !== ''),
+  };
+
+  try {
+    const post = await postsApi.update(params.postSlug, updateInput);
+    return { success: true, post };
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return { success: false, error };
+    }
+    throw error;
+  }
+}
+
 export async function deletePostAction({ params }: ActionFunctionArgs) {
   if (!params.postSlug) {
     throw new Response('Bad Request', { status: 400 });
   }
 
   await postsApi.delete(params.postSlug);
-
   return null;
 }

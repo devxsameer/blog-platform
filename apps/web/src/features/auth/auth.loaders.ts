@@ -1,5 +1,5 @@
 import { redirect } from 'react-router';
-import { authStore } from './store';
+import { authStore } from './auth.store';
 
 export function requireAuth() {
   const user = authStore.getUser();

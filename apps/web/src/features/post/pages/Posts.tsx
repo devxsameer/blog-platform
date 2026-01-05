@@ -1,5 +1,5 @@
 import PostList from '@/features/post/components/PostList';
-import type { postsLoader } from '@/features/post/loaders';
+import type { postsLoader } from '@/features/post/post.loaders';
 import { Suspense, useEffect, useState } from 'react';
 import { useLoaderData, useFetcher, Await } from 'react-router';
 import TagsSection from '../components/TagsSection';

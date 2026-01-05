@@ -3,20 +3,26 @@ import MDEditor from '@uiw/react-md-editor';
 type Props = {
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 };
 
-function MarkdownEditor({ value, onChange }: Props) {
+export default function MarkdownEditor({
+  value,
+  onChange,
+  disabled = false,
+}: Props) {
   return (
     <div data-color-mode="light">
       <MDEditor
         value={value}
         onChange={(val) => onChange(val || '')}
+        preview={disabled ? 'preview' : 'live'}
+        hideToolbar={disabled}
         textareaProps={{
-          placeholder: 'Write your post in Markdown...',
+          placeholder: disabled ? undefined : 'Write your post in Markdown...',
+          'aria-readonly': disabled,
         }}
       />
     </div>
   );
 }
-
-export default MarkdownEditor;

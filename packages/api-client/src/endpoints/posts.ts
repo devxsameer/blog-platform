@@ -54,6 +54,13 @@ export const postsApi = {
     });
     return unwrap<PostContent>(status, body);
   },
+  async update(slug: string, input: Partial<PostInput>) {
+    const { status, body } = await authHttp(`/api/posts/${slug}`, {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+    return unwrap<PostContent>(status, body);
+  },
   async delete(slug: string) {
     const { status, body } = await authHttp(`/api/posts/${slug}`, {
       method: 'DELETE',

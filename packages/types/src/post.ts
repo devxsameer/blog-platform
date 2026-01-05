@@ -6,6 +6,21 @@ export type PostOrder = 'asc' | 'desc';
 
 export type PostSort = 'createdAt' | 'updatedAt' | 'publishedAt';
 
+export type Post = {
+  id: string;
+  authorId: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  viewCount: number;
+  likeCount: number;
+  status?: PostStatus;
+  publishedAt: string | null;
+  createdAt?: string;
+  updatedAt?: string | null;
+  likedbyMe?: boolean;
+};
+
 export type PostContent = {
   id: string;
   authorId: string;
@@ -18,8 +33,8 @@ export type PostContent = {
   likeCount: number;
   status: PostStatus;
   publishedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string | null;
   tags?: Tag[];
   author: {
     username: string;

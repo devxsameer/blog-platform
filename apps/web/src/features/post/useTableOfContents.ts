@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import type { TocItem } from './types';
+import type { TocItem } from './post.types';
 
 export function useTableOfContents() {
   const [toc, setToc] = useState<TocItem[]>([]);

@@ -1,5 +1,5 @@
 import { Await, Outlet, useRouteLoaderData } from 'react-router';
-import type { postLoader } from '@/features/post/loaders';
+import type { postLoader } from '@/features/post/post.loaders';
 import PostContent from '@/features/post/components/PostContent';
 import CommentsSection from '../comment/components/CommentSection';
 import Breadcrumbs from '@/shared/components/Breadcrumbs';

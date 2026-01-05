@@ -1,4 +1,4 @@
-import type { CommentNode } from '../types';
+import type { CommentNode } from '../comment.types';
 import CommentItem from './CommentItem';
 
 export default function CommentList({ tree }: { tree: CommentNode[] }) {

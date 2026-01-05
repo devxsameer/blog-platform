@@ -65,10 +65,10 @@ export default function PostsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Posts</h1>
-          <p>
+      <header className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold tracking-tight">Posts</h1>
+          <p className="text-base-content/70">
             {user?.role === 'admin'
               ? 'You are admin and can edit/delete any post'
               : 'You are author and can edit/delete your posts'}
@@ -77,7 +77,7 @@ export default function PostsPage() {
         <Link to="/dashboard/posts/create" className="btn btn-neutral">
           Create Post
         </Link>
-      </div>
+      </header>
 
       {/* Filters */}
       <div className="card bg-base-100 shadow-sm">

@@ -1,10 +1,11 @@
 import type { rootLoader } from '@/app/root.loader';
-import { Link, useRouteLoaderData } from 'react-router';
+import { Link, useFetcher, useRouteLoaderData } from 'react-router';
 
 function Header() {
   const { user } = useRouteLoaderData('root') as Awaited<
     ReturnType<typeof rootLoader>
   >;
+  const fetcher = useFetcher();
 
   return (
     <div className="navbar bg-base-100 border-base-300 text-base-content border-b-2">
@@ -38,7 +39,18 @@ function Header() {
               </Link>
             </li>
             <li>
-              <a>Logout</a>
+              <button
+                type="button"
+                onClick={() =>
+                  fetcher.submit(null, {
+                    method: 'POST',
+                    action: '/logout',
+                  })
+                }
+                className="w-full px-4 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+              >
+                {fetcher.state === 'submitting' ? 'Logging out...' : 'Logout'}
+              </button>
             </li>
           </ul>
         </div>

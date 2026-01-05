@@ -5,9 +5,9 @@ import { RootLayout } from './root.layout';
 import { portfolioLoader, rootLoader } from './root.loader';
 import { ErrorPage } from '@/pages/Error';
 import ProfilePage from '@/pages/Profile';
-import { requireAuth } from '@/features/auth/loaders';
-import { postRoute } from '@/features/post/route';
-import { authRoute } from '@/features/auth/route';
+import { requireAuth } from '@/features/auth/auth.loaders';
+import { postRoute } from '@/features/post/post.route';
+import { authRoute } from '@/features/auth/auth.route';
 
 export const router = createBrowserRouter([
   {

@@ -1,6 +1,6 @@
-import type { PostInput } from '@blog/types';
+import type { PostContent } from '@blog/types';
 
 export type PostFormProps = {
-  initialValues?: Partial<PostInput>;
+  initialValues?: PostContent;
   mode: 'create' | 'edit';
 };

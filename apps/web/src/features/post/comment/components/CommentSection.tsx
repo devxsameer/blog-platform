@@ -2,8 +2,8 @@ import { Link, useRouteLoaderData } from 'react-router';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import type { RootLoaderData } from '@/app/root.loader';
-import { buildTree } from '../utils';
-import type { Comment } from '../types';
+import { buildTree } from '../comment.utils';
+import type { Comment } from '../comment.types';
 
 export default function CommentsSection({ comments }: { comments: Comment[] }) {
   const { user } = useRouteLoaderData('root') as RootLoaderData;

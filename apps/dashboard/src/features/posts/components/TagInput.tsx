@@ -4,13 +4,19 @@ type Props = {
   value: string[];
   onChange: (tags: string[]) => void;
   maxTags?: number;
+  disabled?: boolean;
 };
 
 function normalize(tag: string) {
   return tag.trim().toLowerCase();
 }
 
-export default function TagInput({ value, onChange, maxTags = 10 }: Props) {
+export default function TagInput({
+  value,
+  onChange,
+  maxTags = 10,
+  disabled = false,
+}: Props) {
   const [input, setInput] = useState('');
 
   function addTag(raw: string) {
@@ -30,6 +36,7 @@ export default function TagInput({ value, onChange, maxTags = 10 }: Props) {
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (disabled) return;
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       addTag(input);
@@ -45,21 +52,30 @@ export default function TagInput({ value, onChange, maxTags = 10 }: Props) {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        disabled={value.length >= maxTags}
+        disabled={disabled || value.length >= maxTags}
       />
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2">
         {value.map((tag) => (
-          <span key={tag} className="badge border-base-300 bg-base-200 gap-2">
+          <span
+            key={tag}
+            className={`badge gap-2 ${
+              disabled
+                ? 'badge-outline opacity-60'
+                : 'bg-base-200 border-base-300'
+            }`}
+          >
             #{tag}
-            <button
-              type="button"
-              className="cursor-pointer opacity-60 hover:opacity-100"
-              onClick={() => removeTag(tag)}
-            >
-              ✕
-            </button>
+            {!disabled && (
+              <button
+                type="button"
+                onClick={() => removeTag(tag)}
+                className="opacity-60 hover:opacity-100"
+              >
+                ✕
+              </button>
+            )}
           </span>
         ))}
 

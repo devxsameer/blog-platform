@@ -2,7 +2,7 @@
 import { redirect } from 'react-router';
 import type { ActionFunctionArgs } from 'react-router';
 import { tokenStore } from '@blog/token-store';
-import { authStore } from './store';
+import { authStore } from './auth.store';
 import { authApi, ValidationError } from '@blog/api-client';
 
 export async function loginAction({ request }: ActionFunctionArgs) {

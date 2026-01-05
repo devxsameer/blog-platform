@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react';
-import type { TocItem } from '../types';
+import type { TocItem } from '../post.types';
 
 function slugify(text: string) {
   return text

@@ -1,5 +1,5 @@
 import { useFetcher, useRouteLoaderData } from 'react-router';
-import type { CommentNode } from '../types';
+import type { CommentNode } from '../comment.types';
 import CommentForm from './CommentForm';
 import type { RootLoaderData } from '@/app/root.loader';
 import { useState } from 'react';

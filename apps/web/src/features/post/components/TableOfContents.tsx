@@ -1,4 +1,4 @@
-import type { TocItem } from '../types';
+import type { TocItem } from '../post.types';
 
 export default function TableOfContents({ items }: { items: TocItem[] }) {
   if (items.length === 0) return null;

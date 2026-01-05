@@ -1,7 +1,7 @@
 // web/src/app/root.loader.ts
 import { redirect } from 'react-router';
 import { tokenStore } from '@blog/token-store';
-import { authStore } from '@/features/auth/store';
+import { authStore } from '@/features/auth/auth.store';
 import type { User } from '@blog/types';
 import { authApi } from '@blog/api-client';
 

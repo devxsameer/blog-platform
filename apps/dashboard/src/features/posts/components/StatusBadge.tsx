@@ -1,4 +1,4 @@
-export default function StatusBadge({ status }: { status: string }) {
+export default function StatusBadge({ status }: { status?: string }) {
   const map: Record<string, string> = {
     draft: 'badge-ghost',
     published: 'badge-success',
@@ -6,6 +6,8 @@ export default function StatusBadge({ status }: { status: string }) {
   };
 
   return (
-    <span className={`badge-sm badge capitalize ${map[status]}`}>{status}</span>
+    <span className={`badge-sm badge capitalize ${map[status ?? 'draft']}`}>
+      {status}
+    </span>
   );
 }

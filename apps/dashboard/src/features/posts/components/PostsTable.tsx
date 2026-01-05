@@ -18,8 +18,10 @@ function PostsTable({ posts }: { posts: PostContent[] }) {
       <tbody>
         {posts.length === 0 && (
           <tr>
-            <td colSpan={4} className="py-10 text-center">
-              No posts found
+            <td colSpan={4}>
+              <div className="text-base-content/60 py-12 text-center">
+                No posts yet. Create your first one ✍️
+              </div>
             </td>
           </tr>
         )}
