@@ -1,6 +1,6 @@
 // src/modules/dashboard/Dashboard.tsx
 import { useLoaderData } from 'react-router';
-import type { LoaderData } from '../dashboard.loaders';
+import { dashboardLoader } from '../dashboard.loaders';
 import StatCard from '../components/StatCard';
 import { TbWriting } from 'react-icons/tb';
 import { LiaCommentsSolid, LiaUsersSolid } from 'react-icons/lia';
@@ -8,7 +8,7 @@ import { AiOutlineLike } from 'react-icons/ai';
 import { HiOutlineEye } from 'react-icons/hi';
 
 export default function Dashboard() {
-  const data = useLoaderData() as LoaderData;
+  const data = useLoaderData<Awaited<ReturnType<typeof dashboardLoader>>>();
 
   return (
     <div className="mx-auto max-w-7xl space-y-10">

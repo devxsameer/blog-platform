@@ -1,4 +1,4 @@
 export type Pagination = {
-  nextCursor: string | null;
-  hasNextPage: boolean;
+  readonly nextCursor: string | null;
+  readonly hasNextPage: boolean;
 };

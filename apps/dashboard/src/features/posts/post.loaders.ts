@@ -8,12 +8,23 @@ export async function postsLoader({ request }: LoaderFunctionArgs) {
 
   await initAuthOnce();
 
+  const sort = url.searchParams.get('sort');
+  const order = url.searchParams.get('order');
+
   const searchQuery: PostsQuery = {
     cursor: url.searchParams.get('cursor') ?? undefined,
     authorId: url.searchParams.get('authorId') ?? undefined,
-    sort: (url.searchParams.get('sort') as PostSort) ?? undefined,
-    order: (url.searchParams.get('order') as PostOrder) ?? undefined,
-    status: (url.searchParams.get('status') as PostStatus) ?? undefined,
+    sort: ['createdAt', 'updatedAt', 'publishedAt'].includes(sort ?? '')
+      ? (sort as PostSort)
+      : undefined,
+    order: ['asc', 'desc'].includes(order ?? '')
+      ? (order as PostOrder)
+      : undefined,
+    status: ['draft', 'published', 'archived'].includes(
+      url.searchParams.get('status') ?? '',
+    )
+      ? (url.searchParams.get('status') as PostStatus)
+      : undefined,
   };
   try {
     const posts = await postsApi.listDashboard(searchQuery);

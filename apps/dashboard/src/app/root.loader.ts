@@ -15,8 +15,6 @@ export async function rootLoader() {
       throw redirect('/login');
     }
 
-    authStore.setUser(user);
-
     return { user };
   } catch {
     authStore.clear();

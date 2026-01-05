@@ -18,7 +18,7 @@ export type Post = {
   publishedAt: string | null;
   createdAt?: string;
   updatedAt?: string | null;
-  likedbyMe?: boolean;
+  likedByMe?: boolean;
 };
 
 export type PostContent = {

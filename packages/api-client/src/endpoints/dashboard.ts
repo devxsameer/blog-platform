@@ -8,7 +8,7 @@ export const dashboardApi = {
     return unwrap<AdminOverview>(status, body);
   },
   async authorOverview() {
-    const { status, body } = await authHttp('/api/dashboard/admin/overview');
+    const { status, body } = await authHttp('/api/dashboard/author/overview');
     return unwrap<AuthorOverview>(status, body);
   },
 };

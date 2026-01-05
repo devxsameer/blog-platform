@@ -1,4 +1,6 @@
-export default function StatusBadge({ status }: { status?: string }) {
+import type { PostStatus } from "@blog/types";
+
+export default function StatusBadge({ status }: { status?: PostStatus }) {
   const map: Record<string, string> = {
     draft: 'badge-ghost',
     published: 'badge-success',
