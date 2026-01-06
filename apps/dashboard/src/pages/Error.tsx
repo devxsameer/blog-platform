@@ -1,5 +1,6 @@
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router';
 import { HiArrowLeft, HiHome } from 'react-icons/hi';
+import { ApiClientError } from '@blog/api-client';
 
 function ErrorPage() {
   const error = useRouteError();
@@ -13,14 +14,10 @@ function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     statusCode = error.status;
     message = error.statusText || error.data?.message || message;
-
-    if (error.status === 404) {
-      title = 'Page Not Found';
-      message = "The dashboard page you are looking for doesn't exist.";
-    } else if (error.status === 401) {
-      title = 'Unauthorized';
-      message = "You don't have permission to view this section.";
-    }
+  } else if (error instanceof ApiClientError) {
+    title = error.code;
+    statusCode = error.status;
+    message = error.message;
   } else if (error instanceof Error) {
     message = error.message;
   }

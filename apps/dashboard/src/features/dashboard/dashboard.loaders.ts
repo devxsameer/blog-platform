@@ -5,6 +5,7 @@ import { initAuthOnce } from '@/features/auth/init-auth-once';
 
 export async function dashboardLoader(_: LoaderFunctionArgs) {
   await initAuthOnce();
+  
 
   if (authStore.isAdmin()) {
     const overview = await dashboardApi.adminOverview();

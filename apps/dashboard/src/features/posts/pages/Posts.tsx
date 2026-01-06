@@ -15,19 +15,21 @@ export default function PostsPage() {
     ReturnType<typeof rootLoader>
   >;
 
-  const { posts: initialData } = useLoaderData() as Awaited<
+  const initialData = useLoaderData() as Awaited<
     ReturnType<typeof postsLoader>
   >;
   const fetcher = useFetcher<Awaited<ReturnType<typeof postsLoader>>>();
 
-  const [posts, setPosts] = useState(initialData.data);
-  const [nextCursor, setNextCursor] = useState(initialData.meta?.nextCursor);
+  const [posts, setPosts] = useState(initialData?.posts.data ?? []);
+  const [nextCursor, setNextCursor] = useState(
+    initialData?.posts.meta?.nextCursor,
+  );
   const [params, setParams] = useSearchParams();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPosts(initialData.data);
-    setNextCursor(initialData.meta?.nextCursor);
+    setPosts(initialData?.posts.data ?? []);
+    setNextCursor(initialData?.posts.meta?.nextCursor);
   }, [initialData]);
 
   useEffect(() => {

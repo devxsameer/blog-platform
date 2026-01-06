@@ -28,7 +28,7 @@ export default function ConfirmDialog({
 
   return (
     <dialog ref={ref} className="modal" aria-modal="true" onCancel={onClose}>
-      <div className="modal-box">
+      <div className="modal-box text-start">
         <h3 className="text-lg font-semibold">{title}</h3>
 
         {description && (

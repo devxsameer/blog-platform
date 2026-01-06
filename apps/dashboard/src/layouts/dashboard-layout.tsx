@@ -1,10 +1,14 @@
-import { Outlet, useNavigation } from 'react-router';
+import { Outlet, useNavigation, useRouteLoaderData } from 'react-router';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { RiMenu4Fill } from 'react-icons/ri';
 import SkeletonLoader from '@/shared/components/SkeletonLoader';
+import { rootLoader } from '@/app/root.loader';
 
 export function DashBoardLayout() {
+  const { user } = useRouteLoaderData('root') as Awaited<
+    ReturnType<typeof rootLoader>
+  >;
   const navigation = useNavigation();
 
   const isPageLoading = navigation.state === 'loading';
@@ -18,7 +22,19 @@ export function DashBoardLayout() {
             <div
               className={`transition-opacity duration-300 ${isPageLoading ? 'pointer-events-none opacity-50' : 'opacity-100'}`}
             >
-              {isPageLoading ? <SkeletonLoader /> : <Outlet />}
+              {isPageLoading ? (
+                <SkeletonLoader />
+              ) : (
+                <>
+                  {user.isReadOnly && (
+                    <div className="alert alert-warning mb-4 text-sm">
+                      You're logged in as a demo admin. Editing and writing are
+                      disabled.
+                    </div>
+                  )}
+                  <Outlet />
+                </>
+              )}
             </div>
           </main>
           <div className="fixed right-6 bottom-6 z-50 lg:hidden">

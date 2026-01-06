@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 type Props = {
   open: boolean;
@@ -10,7 +10,6 @@ type Props = {
 
 export default function PostSuccessModal({ open, slug, mode, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (open) ref.current?.showModal();
@@ -43,12 +42,9 @@ export default function PostSuccessModal({ open, slug, mode, onClose }: Props) {
           </button>
 
           {slug && (
-            <button
-              className="btn btn-neutral"
-              onClick={() => navigate(`/posts/${slug}`)}
-            >
-              View post
-            </button>
+            <Link className="btn btn-neutral" to={'/dashboard/posts'}>
+              View posts
+            </Link>
           )}
         </div>
       </div>

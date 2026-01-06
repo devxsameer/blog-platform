@@ -4,5 +4,6 @@ export type User = {
   bio: string | null;
   email: string;
   role: 'author' | 'admin' | 'user';
+  isReadOnly: boolean;
   createdAt?: string;
 };

@@ -1,7 +1,8 @@
-import { ApiClientError, postsApi } from '@blog/api-client';
+import { postsApi } from '@blog/api-client';
 import type { PostOrder, PostSort, PostsQuery, PostStatus } from '@blog/types';
 import type { LoaderFunctionArgs } from 'react-router';
 import { initAuthOnce } from '../auth/init-auth-once';
+import { throwRouteError } from '@/app/router-error';
 
 export async function postsLoader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -31,10 +32,7 @@ export async function postsLoader({ request }: LoaderFunctionArgs) {
 
     return { posts };
   } catch (err) {
-    if (err instanceof ApiClientError) {
-      throw new Response('Failed to load posts', { status: 500 });
-    }
-    throw new Response('Failed to load posts', { status: 500 });
+    throwRouteError(err, 'Failed to load posts');
   }
 }
 export async function postLoader({ params }: LoaderFunctionArgs) {
@@ -49,12 +47,6 @@ export async function postLoader({ params }: LoaderFunctionArgs) {
 
     return { post };
   } catch (err) {
-    console.error(err);
-    if (err instanceof ApiClientError) {
-      if (err.status === 404) {
-        throw new Response('Post not found', { status: 404 });
-      }
-    }
-    throw new Response('Failed to load post', { status: 500 });
+    throwRouteError(err, 'Failed to load post');
   }
 }

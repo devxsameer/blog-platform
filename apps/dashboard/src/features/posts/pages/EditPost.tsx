@@ -3,7 +3,7 @@ import PostForm from '../components/PostForm';
 import { postLoader } from '../post.loaders';
 
 function EditPostPage() {
-  const { post } = useLoaderData<Awaited<ReturnType<typeof postLoader>>>();
+  const data = useLoaderData<Awaited<ReturnType<typeof postLoader>>>();
 
   return (
     <div className="space-y-6">
@@ -11,7 +11,9 @@ function EditPostPage() {
       <header className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Edit post</h1>
-          <span className="badge badge-outline capitalize">{post.status}</span>
+          <span className="badge badge-outline capitalize">
+            {data?.post.status}
+          </span>
         </div>
 
         <p className="text-base-content/70">
@@ -19,7 +21,7 @@ function EditPostPage() {
         </p>
       </header>
 
-      <PostForm mode="edit" initialValues={post} />
+      <PostForm mode="edit" initialValues={data?.post} />
     </div>
   );
 }
