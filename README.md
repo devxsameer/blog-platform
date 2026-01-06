@@ -2,7 +2,7 @@
 
 A **production-style blog platform** built with modern React and TypeScript, featuring a public blog, a role-based admin dashboard, and a shared API client — all structured as a **pnpm monorepo**.
 
-This project was intentionally designed beyond “portfolio blog” scope to practice **real-world frontend architecture**, authentication flows, and scalable data patterns.
+This project was designed to mirror real-world frontend systems, focusing on authentication flows, shared domain models, and scalable routing patterns.
 
 ---
 
@@ -43,6 +43,22 @@ This project was intentionally designed beyond “portfolio blog” scope to pra
 - Centralized token handling
 - Shared TypeScript domain models
 
+Both applications share a single typed API client and domain model to ensure consistency across the platform.
+
+---
+
+## 🎯 Why This Project Exists
+
+This blog was built as a **real application**, not a tutorial exercise.
+
+Some parts may feel “over-engineered” for a personal blog — that is intentional.  
+The goal was to practice:
+
+- Production-style frontend architecture
+- Authentication edge cases
+- Scalable routing and data patterns
+- Writing code that is easy to reason about and maintain
+
 ---
 
 ## 🧱 Tech Stack
@@ -50,7 +66,7 @@ This project was intentionally designed beyond “portfolio blog” scope to pra
 ### Frontend
 
 - **React 19**
-- **React Router (Data APIs)**
+- **React Router v7 (Data APIs)**
 - **TypeScript**
 - **Tailwind CSS + DaisyUI**
 - **Vite**
@@ -91,6 +107,7 @@ blog-platform/
 - Single refresh request guarded with a shared promise
 - Backend remains the source of truth
 
+Access tokens are intentionally kept out of persistent storage to reduce XSS impact.
 This approach mirrors production-grade SPA authentication patterns.
 
 ---
@@ -126,20 +143,6 @@ All data flow is predictable and colocated with routes.
 
 ---
 
-## 🎯 Why This Project Exists
-
-This blog was built as a **real application**, not a tutorial exercise.
-
-Some parts may feel “over-engineered” for a personal blog — that is intentional.  
-The goal was to practice:
-
-- Production-style frontend architecture
-- Authentication edge cases
-- Scalable routing and data patterns
-- Writing code that is easy to reason about and maintain
-
----
-
 ## 🚀 Running Locally
 
 ```bash
@@ -156,6 +159,7 @@ pnpm dev:dashboard
 ```
 
 > Backend API should be running separately.
+> See the Blog API repository for backend setup instructions.
 
 ---
 
