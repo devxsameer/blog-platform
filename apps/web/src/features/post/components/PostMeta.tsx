@@ -1,7 +1,7 @@
 import type { PostContent } from '@blog/types';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
-import { useFetcher, useRouteLoaderData, Link } from 'react-router';
+import { useFetcher, useRouteLoaderData } from 'react-router';
 import { format } from 'date-fns';
 import type { RootLoaderData } from '@/app/root.loader';
 
@@ -38,12 +38,9 @@ export default function PostMeta({ post }: { post: PostContent }) {
       {post.tags && post.tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {post.tags.map((tag) => (
-            <Link
-              key={tag.id}
-              to={`/posts?tag=${encodeURIComponent(tag.name)}`}
-            >
-              <div className="badge badge-sm badge-neutral">{tag.name}</div>
-            </Link>
+            <div key={tag.id} className="badge badge-sm badge-neutral">
+              {tag.name}
+            </div>
           ))}
         </div>
       )}

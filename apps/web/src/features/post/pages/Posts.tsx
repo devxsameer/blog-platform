@@ -1,11 +1,10 @@
 import PostList from '@/features/post/components/PostList';
 import type { postsLoader } from '@/features/post/post.loaders';
-import { Suspense, useEffect, useState } from 'react';
-import { useLoaderData, useFetcher, Await } from 'react-router';
-import TagsSection from '../components/TagsSection';
+import { useEffect, useState } from 'react';
+import { useLoaderData, useFetcher } from 'react-router';
 
 export default function PostsPage() {
-  const { postsData, tags } = useLoaderData() as Awaited<
+  const { postsData } = useLoaderData() as Awaited<
     ReturnType<typeof postsLoader>
   >;
 
@@ -28,8 +27,8 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="flex gap-16">
-      <div className="max-w-3xl">
+    <div className="flex min-h-[60vh] gap-16">
+      <div className="max-w-prose">
         <h1 className="text-3xl font-semibold">Writing</h1>
 
         <PostList posts={posts} />
@@ -45,14 +44,6 @@ export default function PostsPage() {
             </button>
           </div>
         )}
-      </div>
-
-      <div>
-        <Suspense fallback={<div>Loading tags...</div>}>
-          <Await resolve={tags}>
-            {(resolvedTags) => <TagsSection tags={resolvedTags} />}
-          </Await>
-        </Suspense>
       </div>
     </div>
   );
