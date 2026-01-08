@@ -54,7 +54,7 @@ export default function PostMeta({ post }: { post: PostContent }) {
         </span>
         {' · '}
         <time dateTime={post.createdAt}>
-          Published on {format(new Date(post.createdAt), 'MMM d, yyyy')}
+          Published on {format(new Date(post.createdAt!), 'MMM d, yyyy')}
         </time>
       </div>
 

@@ -1,4 +1,5 @@
-import type { Comment, CommentNode } from './comment.types';
+import type { Comment } from '@blog/types';
+import type { CommentNode } from './comment.types';
 
 export function buildTree(comments: Comment[]): CommentNode[] {
   const map = new Map<string, CommentNode>();

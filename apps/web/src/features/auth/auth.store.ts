@@ -1,5 +1,7 @@
+import type { User } from '@blog/types';
+
 // web/src/features/auth/auth.store.ts
-let user: any | null = null;
+let user: User | null = null;
 
 export const authStore = {
   getUser: () => user,

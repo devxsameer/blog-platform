@@ -3,7 +3,7 @@ import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import type { RootLoaderData } from '@/app/root.loader';
 import { buildTree } from '../comment.utils';
-import type { Comment } from '../comment.types';
+import type { Comment } from '@blog/types';
 
 export default function CommentsSection({ comments }: { comments: Comment[] }) {
   const { user } = useRouteLoaderData('root') as RootLoaderData;

@@ -1,15 +1,4 @@
-export type Comment = {
-  id: string;
-  authorId: string;
-  author: {
-    id: string;
-    username: string;
-  };
-  postId: string;
-  parentId: string | null;
-  content: string;
-  createdAt: string;
-};
+import type { Comment } from '@blog/types';
 
 export type CommentNode = Comment & {
   replies: CommentNode[];
