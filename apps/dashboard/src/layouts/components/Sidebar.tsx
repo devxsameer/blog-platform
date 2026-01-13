@@ -1,13 +1,14 @@
 // dashboard/src/layouts/components/Sidebar.tsx
-import { Link, useMatchRoute } from '@tanstack/react-router';
+import { Link, useMatchRoute, useRouteContext } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { AiFillHome } from 'react-icons/ai';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaUsers } from 'react-icons/fa';
 import { IoMdCreate } from 'react-icons/io';
 import { MdSpaceDashboard } from 'react-icons/md';
 
 function Sidebar() {
   const matchRoute = useMatchRoute();
+  const { user } = useRouteContext({ from: '__root__' });
 
   useEffect(() => {
     const drawerCheckbox = document.getElementById(
@@ -26,6 +27,16 @@ function Sidebar() {
       icon: <MdSpaceDashboard />,
       exact: true,
     },
+    ...(user
+      ? [
+          {
+            to: '/dashboard/users',
+            label: 'Users',
+            icon: <FaUsers />,
+            exact: true,
+          },
+        ]
+      : []),
     {
       to: '/dashboard/profile',
       label: 'Profile',

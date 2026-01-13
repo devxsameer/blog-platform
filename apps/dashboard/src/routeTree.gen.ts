@@ -14,6 +14,7 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
+import { Route as DashboardUsersIndexRouteImport } from './routes/dashboard/users/index'
 import { Route as DashboardPostsIndexRouteImport } from './routes/dashboard/posts/index'
 import { Route as DashboardPostsCreateRouteImport } from './routes/dashboard/posts/create'
 import { Route as DashboardPostsPostSlugEditRouteImport } from './routes/dashboard/posts/$postSlug.edit'
@@ -43,6 +44,11 @@ const DashboardProfileRoute = DashboardProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardUsersIndexRoute = DashboardUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardPostsIndexRoute = DashboardPostsIndexRouteImport.update({
   id: '/posts/',
   path: '/posts/',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/posts/create': typeof DashboardPostsCreateRoute
   '/dashboard/posts': typeof DashboardPostsIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
   '/dashboard/posts/$postSlug/edit': typeof DashboardPostsPostSlugEditRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/posts/create': typeof DashboardPostsCreateRoute
   '/dashboard/posts': typeof DashboardPostsIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
   '/dashboard/posts/$postSlug/edit': typeof DashboardPostsPostSlugEditRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/posts/create': typeof DashboardPostsCreateRoute
   '/dashboard/posts/': typeof DashboardPostsIndexRoute
+  '/dashboard/users/': typeof DashboardUsersIndexRoute
   '/dashboard/posts/$postSlug/edit': typeof DashboardPostsPostSlugEditRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/posts/create'
     | '/dashboard/posts'
+    | '/dashboard/users'
     | '/dashboard/posts/$postSlug/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/posts/create'
     | '/dashboard/posts'
+    | '/dashboard/users'
     | '/dashboard/posts/$postSlug/edit'
   id:
     | '__root__'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/posts/create'
     | '/dashboard/posts/'
+    | '/dashboard/users/'
     | '/dashboard/posts/$postSlug/edit'
   fileRoutesById: FileRoutesById
 }
@@ -165,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProfileRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/users/': {
+      id: '/dashboard/users/'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/posts/': {
       id: '/dashboard/posts/'
       path: '/posts'
@@ -194,6 +213,7 @@ interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardPostsCreateRoute: typeof DashboardPostsCreateRoute
   DashboardPostsIndexRoute: typeof DashboardPostsIndexRoute
+  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
   DashboardPostsPostSlugEditRoute: typeof DashboardPostsPostSlugEditRoute
 }
 
@@ -202,6 +222,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardPostsCreateRoute: DashboardPostsCreateRoute,
   DashboardPostsIndexRoute: DashboardPostsIndexRoute,
+  DashboardUsersIndexRoute: DashboardUsersIndexRoute,
   DashboardPostsPostSlugEditRoute: DashboardPostsPostSlugEditRoute,
 }
 

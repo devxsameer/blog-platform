@@ -1,5 +1,6 @@
 // dashboard/src/features/profile/pages/ProfilePage.tsx
 import { Route } from '@/routes/dashboard/profile';
+import AvatarUploader from '../components/AvatarUploader';
 
 export default function ProfilePage() {
   const { user } = Route.useRouteContext();
@@ -17,11 +18,22 @@ export default function ProfilePage() {
         <div className="card-body space-y-6">
           {/* Identity */}
           <div className="flex items-center gap-6">
-            <div className="avatar avatar-placeholder">
-              <div className="bg-neutral text-neutral-content w-16 rounded-full text-xl font-semibold">
-                {user?.username.charAt(0).toUpperCase()}
+            {user?.avatarUrl ? (
+              <div className="avatar">
+                <img
+                  src={user.avatarUrl}
+                  alt={user.username}
+                  className="w-16 rounded-full"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="avatar avatar-placeholder">
+                <div className="bg-neutral text-neutral-content w-16 rounded-full text-xl font-semibold">
+                  {user?.username.charAt(0).toUpperCase()}
+                </div>
+              </div>
+            )}
+            <AvatarUploader />
 
             <div>
               <h2 className="text-xl font-semibold">{user?.username}</h2>

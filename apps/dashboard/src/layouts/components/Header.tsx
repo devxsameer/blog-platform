@@ -27,11 +27,23 @@ function Header({ user }: Props) {
             role="button"
             className="m-1 flex items-center gap-2 rounded-md px-2 py-1 hover:bg-neutral-100"
           >
-            <div className="avatar avatar-placeholder">
-              <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                <span className="text-sm font-medium">{user?.username[0]}</span>
+            {user?.avatarUrl ? (
+              <div className="avatar">
+                <img
+                  src={user.avatarUrl}
+                  alt={user.username}
+                  className="w-8 rounded-full"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="avatar avatar-placeholder">
+                <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span className="text-sm font-medium">
+                    {user?.username[0]}
+                  </span>
+                </div>
+              </div>
+            )}
             <div className="flex flex-col items-start">
               <span className="text-base-content text-sm/snug font-medium">
                 {user?.username}
