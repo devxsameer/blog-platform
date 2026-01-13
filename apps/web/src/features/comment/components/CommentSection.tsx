@@ -29,6 +29,12 @@ export default function CommentsSection({
         </p>
       )}
 
+      {tree.length === 0 && (
+        <p className="mt-4 text-sm text-neutral-500">
+          No comments yet. Be the first to start the discussion.
+        </p>
+      )}
+
       <CommentList postSlug={postSlug} tree={tree} />
     </section>
   );

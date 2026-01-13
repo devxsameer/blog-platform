@@ -71,10 +71,16 @@ export default function Header() {
                 className="menu dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <Link to="/">Profile</Link>
+                  <Link to="/profile">Profile</Link>
                 </li>
                 <li>
-                  <Link to="/">Dashboard</Link>
+                  <a
+                    href="https://dashboard.blog.devxsameer.me"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Dashboard
+                  </a>
                 </li>
                 <li>
                   <button
@@ -151,9 +157,15 @@ export default function Header() {
                 <NavItem to="/profile" onClick={() => setMobileOpen(false)}>
                   Profile
                 </NavItem>
-                <NavItem to="/dashboard" onClick={() => setMobileOpen(false)}>
-                  Dashboard
-                </NavItem>
+                <li>
+                  <a
+                    href="https://dashboard.blog.devxsameer.me"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Dashboard
+                  </a>
+                </li>
                 <li>
                   <button
                     onClick={() => {
