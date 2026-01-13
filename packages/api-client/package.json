@@ -8,8 +8,18 @@
       "default": "./src/index.ts"
     }
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
   "dependencies": {
     "@blog/token-store": "workspace:*",
     "@blog/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^2.1.8",
+    "vitest": "^2.1.8"
   }
 }

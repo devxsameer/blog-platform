@@ -6,7 +6,8 @@
     "posts",
     "validation",
     "comments",
-    "types"
+    "types",
+    "api-client"
   ],
   "typescript.tsserver.maxTsServerMemory": 2048,
   "typescript.disableAutomaticTypeAcquisition": true,
