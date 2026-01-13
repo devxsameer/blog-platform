@@ -64,4 +64,11 @@ export const authApi = {
       tokenStore.clear();
     }
   },
+  async verifyEmail(token: string) {
+    const { status, body } = await httpRaw(
+      `/api/auth/verify-email?token=${token}`,
+    );
+
+    return unwrap<void>(status, body);
+  },
 };
