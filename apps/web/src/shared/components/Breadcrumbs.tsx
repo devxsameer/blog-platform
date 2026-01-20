@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { House, ChevronRight } from 'lucide-react';
+import { FaChevronRight, FaHouse } from 'react-icons/fa6';
 
 const LABELS: Record<string, string> = {
   posts: 'Posts',
@@ -29,7 +29,7 @@ export default function Breadcrumbs({
         {/* Home */}
         <li>
           <Link to="/" className="flex items-center gap-1">
-            <House className="h-4 w-4" />
+            <FaHouse />
             <span>Home</span>
           </Link>
         </li>
@@ -48,7 +48,7 @@ export default function Breadcrumbs({
 
           return (
             <li key={path} className="flex items-center gap-1">
-              <ChevronRight className="h-4 w-4 text-neutral-400" />
+              <FaChevronRight className="text-neutral-400" />
 
               {isLast ? (
                 <span className="text-neutral-400">{label}</span>

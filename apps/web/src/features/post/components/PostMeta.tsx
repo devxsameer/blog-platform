@@ -1,8 +1,8 @@
 import type { PostContent } from '@blog/types';
-import { HeartIcon } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
 import { useToggleLike } from '../mutations/like-post.mutation';
 import { useAuth } from '@/features/auth/auth.query';
+import { IoHeart } from 'react-icons/io5';
 
 export default function PostMeta({ post }: { post: PostContent }) {
   const { data: user } = useAuth();
@@ -57,7 +57,7 @@ export default function PostMeta({ post }: { post: PostContent }) {
               likedByMe ? 'btn-error' : 'text-gray-500'
             }`}
           >
-            <HeartIcon className="size-4" />
+            <IoHeart />
           </button>
         </div>
         {/* Likes */}

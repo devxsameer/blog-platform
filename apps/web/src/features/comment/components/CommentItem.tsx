@@ -27,14 +27,14 @@ export default function CommentItem({
           name={comment.author.username}
           size={32}
         />
-        <span className="bg-neutral-content w-0.5 grow" />
+        <span className="bg-base-content/15 w-0.5 grow" />
       </div>
 
       <div className="grow space-y-2 pl-3">
         <div className="text-sm">
           <span className="font-semibold">{comment.author.username}</span>
 
-          <p className="my-1 text-neutral-600">{comment.content}</p>
+          <p className="text-base-content/60 my-1">{comment.content}</p>
 
           <div className="flex gap-1 text-xs text-neutral-500">
             <button

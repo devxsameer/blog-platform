@@ -1,8 +1,11 @@
 import { useAuth } from '@/features/auth/auth.query';
 import { useLogout } from '@/features/auth/mutations/logout.mutation';
 import { Avatar } from '@/shared/components/Avatar';
+import { ThemeToggle } from '@/shared/components/ThemeToggle';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { FaUser } from 'react-icons/fa';
+import { MdLogout, MdSpaceDashboard } from 'react-icons/md';
 
 export default function Header() {
   const { data: user, isLoading } = useAuth();
@@ -28,11 +31,26 @@ export default function Header() {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal gap-2 py-0">
             <li>
-              <Link to="/">Home</Link>
+              <Link
+                to="/"
+                activeProps={{
+                  className: 'font-medium underline underline-offset-4',
+                }}
+              >
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/posts">Posts</Link>
+              <Link
+                to="/posts"
+                activeProps={{
+                  className: 'font-medium underline underline-offset-4',
+                }}
+              >
+                Posts
+              </Link>
             </li>
+
             <li>
               <a href="https://devxsameer.me" target="_blank" rel="noreferrer">
                 Portfolio
@@ -43,6 +61,7 @@ export default function Header() {
 
         {/* Right */}
         <div className="navbar-end gap-2">
+          <ThemeToggle />
           {isLoading ? (
             <AuthSkeleton />
           ) : !user ? (
@@ -65,17 +84,21 @@ export default function Header() {
 
               <ul
                 tabIndex={0}
-                className="menu dropdown-content rounded-box bg-base-100 mt-3 w-52 p-2 shadow"
+                className="menu dropdown-content border-base-content/20 rounded-box bg-base-100 mt-2 w-52 border p-2 shadow"
               >
                 <li>
-                  <Link to="/profile">Profile</Link>
+                  <Link to="/profile" className="flex items-center gap-2">
+                    <FaUser /> Profile
+                  </Link>
                 </li>
                 <li>
                   <a
                     href="https://dashboard.blog.devxsameer.me"
                     target="_blank"
                     rel="noreferrer"
+                    className="flex items-center gap-2"
                   >
+                    <MdSpaceDashboard />
                     Dashboard
                   </a>
                 </li>
@@ -83,8 +106,15 @@ export default function Header() {
                   <button
                     onClick={() => logoutMutation.mutate()}
                     disabled={logoutMutation.isPending}
+                    className="flex items-center gap-2"
                   >
-                    {logoutMutation.isPending ? 'Logging out…' : 'Logout'}
+                    {logoutMutation.isPending ? (
+                      'Logging out…'
+                    ) : (
+                      <>
+                        <MdLogout /> Logout
+                      </>
+                    )}
                   </button>
                 </li>
               </ul>

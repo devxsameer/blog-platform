@@ -12,13 +12,15 @@ export default function LoginPage() {
   const loginMutation = useLogin();
 
   return (
-    <div className="card bg-base-100 max-w-sm shadow-sm">
+    <div className="card bg-base-100 border-base-content/20 max-w-sm border shadow-sm">
       <div className="card-body">
         <div>
           <h1 className="text-2xl font-semibold">
             <span className="block text-3xl">🔒</span>Welcome Back
           </h1>
-          <p>Log in to continue interacting with the blog.</p>
+          <p className="text-base-content/80">
+            Log in to continue interacting with the blog.
+          </p>
         </div>
         <div className="mt-4">
           {issues && issues.length > 0 && (
@@ -93,7 +95,7 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-        <p className="mt-4 text-center text-sm">
+        <p className="mt-4 text-center text-sm ">
           First time here?{' '}
           <Link to="/auth/signup" className="link link-hover font-semibold">
             Create an account

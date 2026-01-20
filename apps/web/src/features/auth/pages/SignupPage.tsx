@@ -13,13 +13,15 @@ export default function SignupPage() {
   const signupMutation = useSignup();
 
   return (
-    <div className="card bg-base-100 max-w-sm shadow-sm">
+    <div className="card bg-base-100 border-base-content/20 max-w-sm border shadow-sm">
       <div className="card-body">
         <div>
           <h1 className="text-2xl font-semibold">
             <span className="block text-3xl">👋</span>Create Account
           </h1>
-          <p>Create an account to start exploring and commenting on posts.</p>
+          <p className="text-base-content/80">
+            Create an account to start exploring and commenting on posts.
+          </p>
         </div>
 
         <div className="mt-4">
